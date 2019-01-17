@@ -3,6 +3,7 @@ import IO.FastaReader;
 import calculations.Validator;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
 
@@ -28,13 +29,13 @@ public class Main {
         // init writer
         BufferedWriter logfile = new BufferedWriter(new FileWriter(fileNameWithoutExt +"_logfile.txt"));
 
-
         FastaReader fastaReader = new FastaReader(mt_sequences_filepath);
         List<String> fastaheaders = fastaReader.getDescription();
 
         validator.validate(data_template_filepath, logfile, fastaheaders);
-
         logfile.close();
+
+        System.out.println("You can check the logfile now: \n" + new File(fileNameWithoutExt +"_logfile.txt").getAbsolutePath());
 
 
     }
