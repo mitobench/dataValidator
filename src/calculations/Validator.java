@@ -30,7 +30,7 @@ public class Validator {
             "Peru", "South Georgia and the South Sandwich Islands", "Suriname", "Uruguay", "Venezuela (Bolivarian Republic of)",
             "Bermuda", "Canada", "Greenland", "Saint Pierre and Miquelon", "United States of America", "Antarctica", "Kazakhstan",
             "Kyrgyzstan", "Tajikistan", "Turkmenistan", "Uzbekistan", "China", "China/Hong Kong Special Administrative Region",
-            "China/Macao Special Administrative Region", "Taiwan", "Democratic People s Republic of Korea", "Japan", "Mongolia",
+            "China/Macao Special Administrative Region", "Taiwan", "Democratic Peoples Republic of Korea", "Japan", "Mongolia",
             "Republic of Korea", "Brunei Darussalam", "Cambodia", "Indonesia", "Lao People s Democratic Republic", "Malaysia",
             "Myanmar", "Philippines", "Singapore", "Thailand", "Timor-Leste", "Viet Nam", "Afghanistan", "Bangladesh", "Bhutan",
             "India", "Iran (Islamic Republic of)", "Maldives", "Nepal", "Pakistan", "Sri Lanka", "Armenia", "Azerbaijan", "Bahrain",
@@ -835,7 +835,7 @@ public class Validator {
                         String c14_age_bp = line_splitted[index_C14_age_BP].toLowerCase();
                         if(c14_age_bp.equals("")){
                             errorline_missing_value += "C14 date BP is missing.\n";
-                        } else if(!c14_age_bp.contains("-")){
+                        } else if(!c14_age_bp.contains("+-")){
                             errorline_incorrect_format += "C14 date BP is not in correct format: " + c14_age_bp + "\n";
                         }
                     }

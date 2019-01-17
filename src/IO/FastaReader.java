@@ -59,22 +59,11 @@ public class FastaReader {
             String acc = (String) desc.get(i);
             description[i] = acc.split(" ")[0];
             sequence[i]=(String) seq.get(i);
-//            databasePopulator.fillSequenceEntry("'" + acc.split(" ")[0] + "','" + seq.get(i) + "'");
         }
 
     }
 
-    //return first sequence as a String
-    public String getSequence(){ return sequence[0];}
-
     //return all description as List
     public List<String> getDescription(){return Arrays.asList(description);}
 
-    //return sequence as a String
-    public String getSequence(int i){ return sequence[i];}
-
-    //return description as String
-    public String getDescription(int i){return description[i];}
-
-    public int size(){return sequence.length;}
 }
