@@ -1,15 +1,12 @@
 package calculations;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 public class Validator {
 
@@ -221,150 +218,156 @@ public class Validator {
             int index_user_affiliation = headerList.indexOf("user_affiliation");
 
             // stat missing columns:
+            logfile.write("----------------------------------------------------------\n");
             logfile.write("Missing attributes (columns) in the meta information file: \n");
+            logfile.write("----------------------------------------------------------\n");
             if(index_doi == -1 )
-                logfile.write("DOI is not contained in the meta data file.\n");
+                logfile.write("DOI.\n");
             if(index_author == -1)
-                logfile.write("Author is not contained in the meta data file.\n");
+                logfile.write("Author.\n");
             if(index_publication_date == -1)
-                logfile.write("Publication date is not contained in the meta data file.\n");
+                logfile.write("Publication date.\n");
             if(index_title == -1)
-                logfile.write("Title is not contained in the meta data file.\n");
+                logfile.write("Title.\n");
             if(index_journal == -1)
-                logfile.write("Journal is not contained in the meta data file.\n");
+                logfile.write("Journal.\n");
             if(index_publication_type == -1)
-                logfile.write("Publication type is not contained in the meta data file.\n");
+                logfile.write("Publication type.\n");
             if(index_publication_status == -1)
-                logfile.write("Publication status is not contained in the meta data file.\n");
+                logfile.write("Publication status.\n");
             if(index_publication_comments == -1)
-                logfile.write("Publication comment is not contained in the meta data file.\n");
+                logfile.write("Publication comment.\n");
             if(index_accession_id == -1)
-                logfile.write("Accession id is not contained in the meta data file.\n");
+                logfile.write("Accession id.\n");
             if(index_tissue_sampled == -1)
-                logfile.write("Tissue sampled is not contained in the meta data file.\n");
+                logfile.write("Tissue sampled.\n");
             if(index_sampling_date == -1)
-                logfile.write("Sampling date is not contained in the meta data file.\n");
+                logfile.write("Sampling date.\n");
             if(index_sequencing_platform == -1)
-                logfile.write("Sequencing platform is not contained in the meta data file.\n");
+                logfile.write("Sequencing platform.\n");
             if(index_enrichment_method == -1)
-                logfile.write("Enrichment method is not contained in the meta data file.\n");
+                logfile.write("Enrichment method.\n");
             if(index_extraction_protocol == -1)
-                logfile.write("Extraction protocol is not contained in the meta data file.\n");
+                logfile.write("Extraction protocol.\n");
             if(index_mean_coverage == -1)
-                logfile.write("Mean coverage is not contained in the meta data file.\n");
+                logfile.write("Mean coverage.\n");
             if(index_std_dev_coverage == -1)
-                logfile.write("Std dev coverage is not contained in the meta data file.\n");
+                logfile.write("Std dev coverage.\n");
             if(index_minimum_coverage == -1)
-                logfile.write("Minimum coverage is not contained in the meta data file.\n");
+                logfile.write("Minimum coverage.\n");
             if(index_maximum_coverage == -1)
-                logfile.write("Maximum coverage is not contained in the meta data file.\n");
+                logfile.write("Maximum coverage.\n");
             if(index_calibrated_date_range_from == -1)
-                logfile.write("Calibrated date lower limit is not contained in the meta data file.\n");
+                logfile.write("Calibrated date lower limit.\n");
             if(index_calibrated_date_range_to == -1)
-                logfile.write("Calibrated date upper limit is not contained in the meta data file.\n");
+                logfile.write("Calibrated date upper limit.\n");
             if(index_C14_age_BP == -1)
-                logfile.write("C14 are BP is not contained in the meta data file.\n");
+                logfile.write("C14 are BP.\n");
             if(index_indirect_contextual_date == -1)
-                logfile.write("Indirect contextual date is not contained in the meta data file.\n");
+                logfile.write("Indirect contextual date.\n");
             if(index_radiocarbon_lab_code == -1)
-                logfile.write("Radiocarbon lab code  is not contained in the meta data file.\n");
+                logfile.write("Radiocarbon lab code .\n");
             if(index_dating_comments == -1)
-                logfile.write("Dating comment is not contained in the meta data file.\n");
+                logfile.write("Dating comment.\n");
             if(index_reference_genome == -1)
-                logfile.write("Reference genome is not contained in the meta data file.\n");
+                logfile.write("Reference genome.\n");
             if(index_publication_type == -1)
-                logfile.write("Reference type is not contained in the meta data file.\n");
+                logfile.write("Reference type.\n");
             if(index_starting_np == -1)
-                logfile.write("Starting np is not contained in the meta data file.\n");
+                logfile.write("Starting np.\n");
             if(index_ending_np == -1)
-                logfile.write("Ending np is not contained in the meta data file.\n");
+                logfile.write("Ending np.\n");
             if(index_sequence_versions == -1)
-                logfile.write("Sequence versions is not contained in the meta data file.\n");
+                logfile.write("Sequence versions.\n");
             if(index_haplogroup_originally_published == -1)
-                logfile.write("Haplogroup originally published is not contained in the meta data file.\n");
+                logfile.write("Haplogroup originally published.\n");
             if(index_data_type == -1)
-                logfile.write("Data type is not contained in the meta data file.\n");
+                logfile.write("Data type.\n");
             if(index_labsample_id == -1)
-                logfile.write("Labsample id is not contained in the meta data file.\n");
+                logfile.write("Labsample id.\n");
             if(index_sex == -1)
-                logfile.write("Sex is not contained in the meta data file.\n");
+                logfile.write("Sex.\n");
             if(index_age == -1)
-                logfile.write("Age is not contained in the meta data file.\n");
+                logfile.write("Age.\n");
             if(index_population_purpose == -1)
-                logfile.write("Population purpose is not contained in the meta data file.\n");
+                logfile.write("Population purpose.\n");
             if(index_access == -1)
-                logfile.write("Access is not contained in the meta data file.\n");
+                logfile.write("Access.\n");
             if(index_population == -1)
-                logfile.write("Population is not contained in the meta data file.\n");
+                logfile.write("Population.\n");
             if(index_geographic_info_TMA_inferred_region == -1)
-                logfile.write("Geographic info TMA inferred region is not contained in the meta data file.\n");
+                logfile.write("Geographic info TMA inferred region.\n");
             if(index_geographic_info_TMA_inferred_subregion == -1)
-                logfile.write("Geographic info TMA inferred subregion is not contained in the meta data file.\n");
+                logfile.write("Geographic info TMA inferred subregion.\n");
             if(index_geographic_info_TMA_inferred_intermediate_region == -1)
-                logfile.write("Geographic info TMA inferred intermediate region is not contained in the meta data file.\n");
+                logfile.write("Geographic info TMA inferred intermediate region.\n");
             if(index_geographic_info_TMA_inferred_country == -1)
-                logfile.write("Geographic info TMA inferred country is not contained in the meta data file.\n");
+                logfile.write("Geographic info TMA inferred country.\n");
             if(index_geographic_info_TMA_inferred_city == -1)
-                logfile.write("Geographic info TMA inferred city is not contained in the meta data file.\n");
+                logfile.write("Geographic info TMA inferred city.\n");
             if(index_geographic_info_TMA_inferred_latitude == -1)
-                logfile.write("Geographic info TMA inferred latitude is not contained in the meta data file.\n");
+                logfile.write("Geographic info TMA inferred latitude.\n");
             if(index_geographic_info_TMA_inferred_longitude == -1)
-                logfile.write("Geographic info TMA inferred longitude is not contained in the meta data file.\n");
+                logfile.write("Geographic info TMA inferred longitude.\n");
             if(index_sample_origin_region == -1)
-                logfile.write("Sample origin region is not contained in the meta data file.\n");
+                logfile.write("Sample origin region.\n");
             if(index_sample_origin_subregion == -1)
-                logfile.write("Sample origin subregion is not contained in the meta data file.\n");
+                logfile.write("Sample origin subregion.\n");
             if(index_sample_origin_intermediate_region == -1)
-                logfile.write("Sample origin intermediate region is not contained in the meta data file.\n");
+                logfile.write("Sample origin intermediate region.\n");
             if(index_sample_origin_country == -1)
-                logfile.write("Sample origin country is not contained in the meta data file.\n");
+                logfile.write("Sample origin country.\n");
             if(index_sample_origin_city == -1)
-                logfile.write("Sample origin city is not contained in the meta data file.\n");
+                logfile.write("Sample origin city.\n");
             if(index_sample_origin_latitude == -1)
-                logfile.write("Sample origin latitude is not contained in the meta data file.\n");
+                logfile.write("Sample origin latitude.\n");
             if(index_sample_origin_longitude == -1)
-                logfile.write("Sample origin longitude is not contained in the meta data file.\n");
+                logfile.write("Sample origin longitude.\n");
             if(index_sampling_region == -1)
-                logfile.write("Sampling region is not contained in the meta data file.\n");
+                logfile.write("Sampling region.\n");
             if(index_sampling_subregion == -1)
-                logfile.write("Sampling subregion is not contained in the meta data file.\n");
+                logfile.write("Sampling subregion.\n");
             if(index_sampling_intermediate_region == -1)
-                logfile.write("Sampling intermediate region is not contained in the meta data file.\n");
+                logfile.write("Sampling intermediate region.\n");
             if(index_sampling_country == -1)
-                logfile.write("Sampling country is not contained in the meta data file.\n");
+                logfile.write("Sampling country.\n");
             if(index_sampling_city == -1)
-                logfile.write("Sampling city is not contained in the meta data file.\n");
+                logfile.write("Sampling city.\n");
             if(index_sampling_latitude == -1)
-                logfile.write("Sampling latitude is not contained in the meta data file.\n");
+                logfile.write("Sampling latitude.\n");
             if(index_sampling_longitude == -1)
-                logfile.write("Sampling longitude is not contained in the meta data file.\n");
+                logfile.write("Sampling longitude.\n");
             if(index_marriage_rules == -1)
-                logfile.write("Marriage rules is not contained in the meta data file.\n");
+                logfile.write("Marriage rules.\n");
             if(index_marriage_system == -1)
-                logfile.write("Marriage system is not contained in the meta data file.\n");
+                logfile.write("Marriage system.\n");
             if(index_descent_system == -1)
-                logfile.write("Descent system is not contained in the meta data file.\n");
+                logfile.write("Descent system.\n");
             if(index_residence_system == -1)
-                logfile.write("Residence system is not contained in the meta data file.\n");
+                logfile.write("Residence system.\n");
             if(index_subsistence == -1)
-                logfile.write("Subsistence is not contained in the meta data file.\n");
+                logfile.write("Subsistence.\n");
             if(index_clan == -1)
-                logfile.write("Clan is not contained in the meta data file.\n");
+                logfile.write("Clan.\n");
             if(index_ethnicity == -1)
-                logfile.write("Ethnicity is not contained in the meta data file.\n");
+                logfile.write("Ethnicity.\n");
             if(index_language == -1)
-                logfile.write("Language is not contained in the meta data file.\n");
+                logfile.write("Language.\n");
             if(index_generations_to_TMA == -1)
-                logfile.write("Generations to TMA is not contained in the meta data file.\n");
+                logfile.write("Generations to TMA.\n");
             if(index_user_firstname == -1)
-                logfile.write("User first name is not contained in the meta data file.\n");
+                logfile.write("User first name.\n");
             if(index_user_surname == -1)
-                logfile.write("User surname is not contained in the meta data file.\n");
+                logfile.write("User surname.\n");
             if(index_user_email == -1)
-                logfile.write("User email is not contained in the meta data file.\n");
+                logfile.write("User email.\n");
             if(index_user_affiliation == -1)
-                logfile.write("User affiliation is not contained in the meta data file.\n");
+                logfile.write("User affiliation.\n");
 
+
+            //logfile.write("----------------------------------------------------------\n");
+            //logfile.write("Accession id given in meta file, but sequences missing in fasta file: \n");
+            //logfile.write("----------------------------------------------------------\n");
 
 
 
@@ -755,7 +758,7 @@ public class Validator {
                     if(index_publication_date != -1){
                         if(line_splitted[index_publication_date].equals("")){
                             errorline_missing_value += "Publication date is missing.\n";
-                        } else if(!isValidFormat("yyyy-mm-dd", line_splitted[index_publication_date], Locale.ENGLISH)){
+                        } else if(!isDateValid(line_splitted[index_publication_date])){
                             errorline_incorrect_format += "Publication date is not in correct format: " + line_splitted[index_publication_date] + "\n";
                         }
                     }
@@ -764,7 +767,7 @@ public class Validator {
 
                         if(line_splitted[index_sampling_date].equals("")){
                             errorline_missing_value += "Sampling date is missing.\n";
-                        } else if(!isValidFormat("yyyy-mm-dd", line_splitted[index_sampling_date], Locale.ENGLISH)){
+                        } else if(!isDateValid(line_splitted[index_sampling_date])){
                             errorline_incorrect_format += "Sampling date is not in correct format: " + line_splitted[index_sampling_date] + "\n";
                         }
                     }
@@ -881,29 +884,16 @@ public class Validator {
         }
     }
 
-    private static boolean isValidFormat(String format, String value, Locale locale) {
-        LocalDateTime ldt;
-        DateTimeFormatter fomatter = DateTimeFormatter.ofPattern(format, locale);
-
+    public static boolean isDateValid(String date)
+    {
+        String DATE_FORMAT = "yyyy-mm-dd";
         try {
-            ldt = LocalDateTime.parse(value, fomatter);
-            String result = ldt.format(fomatter);
-            return result.equals(value);
-        } catch (DateTimeParseException e) {
-            try {
-                LocalDate ld = LocalDate.parse(value, fomatter);
-                String result = ld.format(fomatter);
-                return result.equals(value);
-            } catch (DateTimeParseException exp) {
-                try {
-                    LocalTime lt = LocalTime.parse(value, fomatter);
-                    String result = lt.format(fomatter);
-                    return result.equals(value);
-                } catch (DateTimeParseException e2) {
-                }
-            }
+            DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+            df.setLenient(false);
+            df.parse(date);
+            return true;
+        } catch (ParseException e) {
+            return false;
         }
-
-        return false;
     }
 }

@@ -24,7 +24,7 @@ public class ArgumentParser {
         options.addOption("h", "help", false, "show this help page");
         options.addOption(OptionBuilder.withLongOpt("input")
                 .withArgName("INPUT")
-                .withDescription("The input meta data file")
+                .withDescription("The input meta data file (csv file)")
                 .isRequired()
                 .hasArg()
                 .create("i"));
