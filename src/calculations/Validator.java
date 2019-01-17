@@ -42,9 +42,22 @@ public class Validator {
             "Christmas Island", "Cocos (Keeling) Islands", "Heard Island and McDonald Islands", "New Zealand", "Norfolk Island",
             "Fiji", "New Caledonia", "Papua New Guinea", "Solomon Islands", "Vanuatu", "Guam", "Kiribati", "Marshall Islands",
             "Micronesia (Federated States of)", "Nauru", "Northern Mariana Islands", "Palau", "United States Minor Outlying Islands",
-            "American Samoa", "Cook Islands", "French Polynesia", "Niue", "Pitcairn", "Samoa", "Tokelau", "Tonga", "Tuvalu", "Wallis and Futuna Islands");
+            "American Samoa", "Cook Islands", "French Polynesia", "Niue", "Pitcairn", "Samoa", "Tokelau", "Tonga", "Tuvalu", "Wallis and Futuna Islands",
 
-
+            "DZA","EGY","LBY","MAR","SDN","TUN","ESH","IOT","BDI","COM","DJI","ERI","ETH","ATF","KEN","MDG","MWI","MUS",
+            "MYT","MOZ","REU","RWA","SYC","SOM","SSD","UGA","TZA","ZMB","ZWE","AGO","CMR","CAF","TCD","COG","COD","GNQ",
+            "GAB","STP","BWA","SWZ","LSO","NAM","ZAF","BEN","BFA","CPV","CIV","GMB","GHA","GIN","GNB","LBR","MLI","MRT",
+            "NER","NGA","SHN","SEN","SLE","TGO","AIA","ATG","ABW","BHS","BRB","BES","VGB","CYM","CUB","CUW","DMA","DOM",
+            "GRD","GLP","HTI","JAM","MTQ","MSR","PRI","BLM","KNA","LCA","MAF","VCT","SXM","TTO","TCA","VIR","BLZ","CRI",
+            "SLV","GTM","HND","MEX","NIC","PAN","ARG","BOL","BVT","BRA","CHL","COL","ECU","FLK","GUF","GUY","PRY","PER",
+            "SGS","SUR","URY","VEN","BMU","CAN","GRL","SPM","USA","ATA","KAZ","KGZ","TJK","TKM","UZB","CHN","HKG","MAC",
+            "TWN","PRK","JPN","MNG","KOR","BRN","KHM","IDN","LAO","MYS","MMR","PHL","SGP","THA","TLS","VNM","AFG","BGD",
+            "BTN","IND","IRN","MDV","NPL","PAK","LKA","ARM","AZE","BHR","CYP","GEO","IRQ","ISR","JOR","KWT","LBN","OMN",
+            "QAT","SAU","PSE","SYR","TUR","ARE","YEM","BLR","BGR","CZE","HUN","POL","MDA","ROU","RUS","SVK","UKR","ALA",
+            "GGY","JEY","DNK","EST","FRO","FIN","ISL","IRL","IMN","LVA","LTU","NOR","SJM","SWE","GBR","ALB","AND","BIH",
+            "HRV","GIB","GRC","VAT","ITA","MLT","MNE","PRT","SMR","XKX","SRB","SVN","ESP","MKD","AUT","BEL","FRA","DEU",
+            "LIE","LUX","MCO","NLD","CHE","AUS","CXR","CCK","HMD","NZL","NFK","FJI","NCL","PNG","SLB","VUT","GUM","KIR",
+            "MHL","FSM","NRU","MNP","PLW","UMI","ASM","COK","PYF","NIU","PCN","WSM","TKL","TON","TUV","WLF");
 
     private List<String> region = Arrays.asList("Africa", "Americas", "Antarctica", "Asia", "Europe", "Oceania");
     private List<String> subregion = Arrays.asList("Northern Africa", "Sub-Saharan Africa", "Latin America and the Caribbean",
@@ -673,7 +686,7 @@ public class Validator {
                         String sampling_region = line_splitted[index_sampling_region];
                         if (sampling_region.equals("")) {
                             errorline_missing_value += "Sampling region is missing.\n";
-                        } else if(!subregion.contains(sampling_region)){
+                        } else if(!region.contains(sampling_region)){
                             errorline_incorrect_format += "Sampling region is not in correct format: "+ sampling_region + "\n";
                         }
                     }
