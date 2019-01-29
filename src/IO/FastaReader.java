@@ -11,6 +11,9 @@ public class FastaReader {
 
     private String [] description;
     private String [] sequence;
+    private String log_sequence_corretness="";
+    private boolean correct=true;
+    private boolean correct_chars=true;
 
     public FastaReader(String filename)
     {
@@ -38,9 +41,26 @@ public class FastaReader {
             {
                 if( line.length()>0 && line.charAt( 0 ) == '>' )
                 {
+                    String sequence = buffer.toString();
+                    if (buffer.toString().contains("-")){
+                        correct=false;
+                    } else if(!isSequenceValid(buffer.toString())){
+                        correct_chars=false;
+                    }
                     seq.add(buffer.toString());
                     buffer = new StringBuffer();
                     desc.add(line.replace(">",""));
+                    if(!correct && correct_chars){
+                        log_sequence_corretness += "Sequence '" + line.replace(">","") + "' contains '-'\n" + sequence + "\n";
+                        correct=true;
+                    } else if(correct && !correct_chars){
+                        log_sequence_corretness += "Sequence '" + line.replace(">","") + "' contains not allowed symbols.\n" + sequence + "\n";
+                        correct_chars=true;
+                    } else if(!correct && !correct_chars){
+                        log_sequence_corretness += "Sequence '" + line.replace(">","") + "' contains '-' and not allowed symbols. \n" + sequence + "\n";
+                        correct_chars=true;
+                        correct=true;                    }
+
                 } else
                     buffer.append( line.trim() );
             }
@@ -63,7 +83,23 @@ public class FastaReader {
 
     }
 
+    private boolean isSequenceValid(String seq) {
+
+        String specialCharacters = "[" + "ACGTUWSMKRYBDHVNZ"+ "]+" ;
+
+        if (seq.matches(specialCharacters)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     //return all description as List
     public List<String> getDescription(){return Arrays.asList(description);}
+
+    public String getLog_sequence_corretness(){
+        return log_sequence_corretness;
+    }
 
 }

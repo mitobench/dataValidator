@@ -34,7 +34,7 @@ public class Main {
 
         logfile.write("Data validation report based on files:\n" + mt_sequences_filepath + "\n"+ data_template_filepath + "\n\n");
 
-        validator.validate(data_template_filepath, logfile, fastaheaders);
+        validator.validate(data_template_filepath, logfile, fastaheaders, fastaReader.getLog_sequence_corretness());
         logfile.close();
 
         System.out.println("You can check the logfile now: \n" + new File(fileNameWithoutExt +"_logfile.txt").getAbsolutePath());

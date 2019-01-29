@@ -84,7 +84,7 @@ public class Validator {
     private int count_meta=0;
 
 
-    public boolean validate(String data_template, BufferedWriter logfile, List<String> fastaheaders) {
+    public boolean validate(String data_template, BufferedWriter logfile, List<String> fastaheaders, String log_sequence_corretness) {
         BufferedReader br = null;
         String line;
         String delimiter = ",";
@@ -877,14 +877,18 @@ public class Validator {
 
             //logfile.write("Missing attributes (columns) in the meta information file: \n");
 
-            if(log_incorrect_format.equals(string_accession_default)){
+            if(log_incorrect_format.equals(string_accession_default) && log_sequence_corretness.equals("")){
                 logfile.write("\nAll values are correct. Upload possible.\n\n");
+            } else if(!log_incorrect_format.equals(string_accession_default) && log_sequence_corretness.equals("")){
+                logfile.write("Upload not possible. Please check your data! \n\n Incorrect values:\n" + log_incorrect_format);
+            } else if(log_incorrect_format.equals(string_accession_default) && !log_sequence_corretness.equals("")){
+                logfile.write("Upload not possible. Please check your data! \n\n Incorrect sequences:\n" + log_sequence_corretness);
             } else {
-                logfile.write("Incorrect values:\n" + log_incorrect_format);
+                logfile.write("Upload not possible. Please check your data! \n\n Incorrect values:\n" + log_incorrect_format);
+                logfile.write("Incorrect sequences:\n" + log_sequence_corretness);
             }
 
             logfile.write("=========================================================\n");
-
 
 
             if(log_missing_columns.equals("")){
