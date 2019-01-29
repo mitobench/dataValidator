@@ -32,6 +32,8 @@ public class Main {
         FastaReader fastaReader = new FastaReader(mt_sequences_filepath);
         List<String> fastaheaders = fastaReader.getDescription();
 
+        logfile.write("Data validation report based on files:\n" + mt_sequences_filepath + "\n"+ data_template_filepath + "\n\n");
+
         validator.validate(data_template_filepath, logfile, fastaheaders);
         logfile.close();
 

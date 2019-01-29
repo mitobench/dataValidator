@@ -4,9 +4,7 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Validator {
 
@@ -75,11 +73,23 @@ public class Validator {
     private List<String> sequencing_platform = Arrays.asList("illumina","454","sanger","nanopore","pacbio");
 
 
+    private String log_missing_sequences="";
+    private String log_missing_columns="";
+    private String log_mandatory_fields ="";
+    private String log_incorrect_format = "";
+    private String log_missing_value = "";
+    private String string_accession_default = "";
+
+    private int count_sequences=0;
+    private int count_meta=0;
+
+
     public boolean validate(String data_template, BufferedWriter logfile, List<String> fastaheaders) {
         BufferedReader br = null;
         String line;
         String delimiter = ",";
         HashMap<String, Integer> attribute_index_map = new HashMap<>();
+        count_sequences=fastaheaders.size();
 
         // parse header line
         try {
@@ -232,221 +242,223 @@ public class Validator {
             int index_user_affiliation = headerList.indexOf("user_affiliation");
 
             // stat missing columns:
-            logfile.write("----------------------------------------------------------\n");
-            logfile.write("Missing attributes (columns) in the meta information file: \n");
-            logfile.write("----------------------------------------------------------\n");
+
+
             if(index_doi == -1 )
-                logfile.write("DOI.\n");
+                log_missing_columns += "DOI.\n";
             if(index_author == -1)
-                logfile.write("Author.\n");
+                log_missing_columns +="Author.\n";
             if(index_publication_date == -1)
-                logfile.write("Publication date.\n");
+                log_missing_columns +="Publication date.\n";
             if(index_title == -1)
-                logfile.write("Title.\n");
+                log_missing_columns +="Title.\n";
             if(index_journal == -1)
-                logfile.write("Journal.\n");
+                log_missing_columns +="Journal.\n";
             if(index_publication_type == -1)
-                logfile.write("Publication type.\n");
+                log_missing_columns +="Publication type.\n";
             if(index_publication_status == -1)
-                logfile.write("Publication status.\n");
+                log_missing_columns +="Publication status.\n";
             if(index_publication_comments == -1)
-                logfile.write("Publication comment.\n");
+                log_missing_columns +="Publication comment.\n";
             if(index_accession_id == -1)
-                logfile.write("Accession id.\n");
+                log_missing_columns +="Accession id.\n";
             if(index_tissue_sampled == -1)
-                logfile.write("Tissue sampled.\n");
+                log_missing_columns +="Tissue sampled.\n";
             if(index_sampling_date == -1)
-                logfile.write("Sampling date.\n");
+                log_missing_columns +="Sampling date.\n";
             if(index_sequencing_platform == -1)
-                logfile.write("Sequencing platform.\n");
+                log_missing_columns +="Sequencing platform.\n";
             if(index_enrichment_method == -1)
-                logfile.write("Enrichment method.\n");
+                log_missing_columns +="Enrichment method.\n";
             if(index_extraction_protocol == -1)
-                logfile.write("Extraction protocol.\n");
+                log_missing_columns +="Extraction protocol.\n";
             if(index_mean_coverage == -1)
-                logfile.write("Mean coverage.\n");
+                log_missing_columns +="Mean coverage.\n";
             if(index_std_dev_coverage == -1)
-                logfile.write("Std dev coverage.\n");
+                log_missing_columns +="Std dev coverage.\n";
             if(index_minimum_coverage == -1)
-                logfile.write("Minimum coverage.\n");
+                log_missing_columns +="Minimum coverage.\n";
             if(index_maximum_coverage == -1)
-                logfile.write("Maximum coverage.\n");
+                log_missing_columns +="Maximum coverage.\n";
             if(index_calibrated_date_range_from == -1)
-                logfile.write("Calibrated date lower limit.\n");
+                log_missing_columns +="Calibrated date lower limit.\n";
             if(index_calibrated_date_range_to == -1)
-                logfile.write("Calibrated date upper limit.\n");
+                log_missing_columns +="Calibrated date upper limit.\n";
             if(index_C14_age_BP == -1)
-                logfile.write("C14 are BP.\n");
+                log_missing_columns +="C14 are BP.\n";
             if(index_indirect_contextual_date == -1)
-                logfile.write("Indirect contextual date.\n");
+                log_missing_columns +="Indirect contextual date.\n";
             if(index_radiocarbon_lab_code == -1)
-                logfile.write("Radiocarbon lab code .\n");
+                log_missing_columns +="Radiocarbon lab code .\n";
             if(index_dating_comments == -1)
-                logfile.write("Dating comment.\n");
+                log_missing_columns +="Dating comment.\n";
             if(index_reference_genome == -1)
-                logfile.write("Reference genome.\n");
+                log_missing_columns +="Reference genome.\n";
             if(index_publication_type == -1)
-                logfile.write("Reference type.\n");
+                log_missing_columns +="Reference type.\n";
             if(index_starting_np == -1)
-                logfile.write("Starting np.\n");
+                log_missing_columns +="Starting np.\n";
             if(index_ending_np == -1)
-                logfile.write("Ending np.\n");
+                log_missing_columns +="Ending np.\n";
             if(index_sequence_versions == -1)
-                logfile.write("Sequence versions.\n");
+                log_missing_columns +="Sequence versions.\n";
             if(index_haplogroup_originally_published == -1)
-                logfile.write("Haplogroup originally published.\n");
+                log_missing_columns +="Haplogroup originally published.\n";
             if(index_data_type == -1)
-                logfile.write("Data type.\n");
+                log_missing_columns +="Data type.\n";
             if(index_labsample_id == -1)
-                logfile.write("Labsample id.\n");
+                log_missing_columns +="Labsample id.\n";
             if(index_sex == -1)
-                logfile.write("Sex.\n");
+                log_missing_columns +="Sex.\n";
             if(index_age == -1)
-                logfile.write("Age.\n");
+                log_missing_columns +="Age.\n";
             if(index_population_purpose == -1)
-                logfile.write("Population purpose.\n");
+                log_missing_columns +="Population purpose.\n";
             if(index_access == -1)
-                logfile.write("Access.\n");
+                log_missing_columns +="Access.\n";
             if(index_population == -1)
-                logfile.write("Population.\n");
+                log_missing_columns +="Population.\n";
             if(index_geographic_info_TMA_inferred_region == -1)
-                logfile.write("Geographic info TMA inferred region.\n");
+                log_missing_columns +="Geographic info TMA inferred region.\n";
             if(index_geographic_info_TMA_inferred_subregion == -1)
-                logfile.write("Geographic info TMA inferred subregion.\n");
+                log_missing_columns +="Geographic info TMA inferred subregion.\n";
             if(index_geographic_info_TMA_inferred_intermediate_region == -1)
-                logfile.write("Geographic info TMA inferred intermediate region.\n");
+                log_missing_columns +="Geographic info TMA inferred intermediate region.\n";
             if(index_geographic_info_TMA_inferred_country == -1)
-                logfile.write("Geographic info TMA inferred country.\n");
+                log_missing_columns +="Geographic info TMA inferred country.\n";
             if(index_geographic_info_TMA_inferred_city == -1)
-                logfile.write("Geographic info TMA inferred city.\n");
+                log_missing_columns +="Geographic info TMA inferred city.\n";
             if(index_geographic_info_TMA_inferred_latitude == -1)
-                logfile.write("Geographic info TMA inferred latitude.\n");
+                log_missing_columns +="Geographic info TMA inferred latitude.\n";
             if(index_geographic_info_TMA_inferred_longitude == -1)
-                logfile.write("Geographic info TMA inferred longitude.\n");
+                log_missing_columns +="Geographic info TMA inferred longitude.\n";
             if(index_sample_origin_region == -1)
-                logfile.write("Sample origin region.\n");
+                log_missing_columns +="Sample origin region.\n";
             if(index_sample_origin_subregion == -1)
-                logfile.write("Sample origin subregion.\n");
+                log_missing_columns +="Sample origin subregion.\n";
             if(index_sample_origin_intermediate_region == -1)
-                logfile.write("Sample origin intermediate region.\n");
+                log_missing_columns +="Sample origin intermediate region.\n";
             if(index_sample_origin_country == -1)
-                logfile.write("Sample origin country.\n");
+                log_missing_columns +="Sample origin country.\n";
             if(index_sample_origin_city == -1)
-                logfile.write("Sample origin city.\n");
+                log_missing_columns +="Sample origin city.\n";
             if(index_sample_origin_latitude == -1)
-                logfile.write("Sample origin latitude.\n");
+                log_missing_columns +="Sample origin latitude.\n";
             if(index_sample_origin_longitude == -1)
-                logfile.write("Sample origin longitude.\n");
+                log_missing_columns +="Sample origin longitude.\n";
             if(index_sampling_region == -1)
-                logfile.write("Sampling region.\n");
+                log_missing_columns +="Sampling region.\n";
             if(index_sampling_subregion == -1)
-                logfile.write("Sampling subregion.\n");
+                log_missing_columns +="Sampling subregion.\n";
             if(index_sampling_intermediate_region == -1)
-                logfile.write("Sampling intermediate region.\n");
+                log_missing_columns +="Sampling intermediate region.\n";
             if(index_sampling_country == -1)
-                logfile.write("Sampling country.\n");
+                log_missing_columns +="Sampling country.\n";
             if(index_sampling_city == -1)
-                logfile.write("Sampling city.\n");
+                log_missing_columns +="Sampling city.\n";
             if(index_sampling_latitude == -1)
-                logfile.write("Sampling latitude.\n");
+                log_missing_columns +="Sampling latitude.\n";
             if(index_sampling_longitude == -1)
-                logfile.write("Sampling longitude.\n");
+                log_missing_columns +="Sampling longitude.\n";
             if(index_marriage_rules == -1)
-                logfile.write("Marriage rules.\n");
+                log_missing_columns +="Marriage rules.\n";
             if(index_marriage_system == -1)
-                logfile.write("Marriage system.\n");
+                log_missing_columns +="Marriage system.\n";
             if(index_descent_system == -1)
-                logfile.write("Descent system.\n");
+                log_missing_columns +="Descent system.\n";
             if(index_residence_system == -1)
-                logfile.write("Residence system.\n");
+                log_missing_columns +="Residence system.\n";
             if(index_subsistence == -1)
-                logfile.write("Subsistence.\n");
+                log_missing_columns +="Subsistence.\n";
             if(index_clan == -1)
-                logfile.write("Clan.\n");
+                log_missing_columns +="Clan.\n";
             if(index_ethnicity == -1)
-                logfile.write("Ethnicity.\n");
+                log_missing_columns +="Ethnicity.\n";
             if(index_language == -1)
-                logfile.write("Language.\n");
+                log_missing_columns +="Language.\n";
             if(index_generations_to_TMA == -1)
-                logfile.write("Generations to TMA.\n");
+                log_missing_columns +="Generations to TMA.\n";
             if(index_user_firstname == -1)
-                logfile.write("User first name.\n");
+                log_missing_columns +="User first name.\n";
             if(index_user_surname == -1)
-                logfile.write("User surname.\n");
+                log_missing_columns +="User surname.\n";
             if(index_user_email == -1)
-                logfile.write("User email.\n");
+                log_missing_columns +="User email.\n";
             if(index_user_affiliation == -1)
-                logfile.write("User affiliation.\n");
-
-
-            //logfile.write("----------------------------------------------------------\n");
-            //logfile.write("Accession id given in meta file, but sequences missing in fasta file: \n");
-            //logfile.write("----------------------------------------------------------\n");
+                log_missing_columns +="User affiliation.\n";
 
 
 
             // iterate over all lines and check correct format and missing value
-            logfile.write("--------------------------------------------------\n");
-            logfile.write("--------------------------------------------------\n");
 
             while ((line = br.readLine()) != null) {
                 if(!line.startsWith("#") && !line.startsWith("##")){
+                    count_meta++;
 
 
                     String[] line_splitted = line.split(",", headerLine_array.length);
                     // does sequence exists?
                     String accession = line_splitted[index_accession_id];
 
-                    logfile.write("\n\nEntry to accession ID: " + accession + "\n");
+                    //log_mandatory_fields += "Entry to accession ID: " + accession + "\n";
 
+                    log_incorrect_format += "--------------------------------------------------\n" + accession + ":\n";
+                    log_missing_value += "--------------------------------------------------\n" + accession + ":\n";
+                    log_mandatory_fields += "--------------------------------------------------\n" + accession + ":\n";
+                    string_accession_default += "--------------------------------------------------\n" + accession + ":\n";
 
-                    String errorline_incorrect_format = "";
-                    String errorline_missing_value = "";
 
                     if(!fastaheaders.contains(accession)){
-                        logfile.write("Sequence with this accession ID: "+ accession +" does not exist in fasta file.\n");
+                        log_missing_sequences += "Sequence with this accession ID: "+ accession +" does not exist in fasta file.\n";
                     }
 
                     // the mandatory fields has to be present:
                     if(line_splitted[index_accession_id] == null || line_splitted[index_accession_id].equals("")){
-                        logfile.write("Accession ID must be set! (mandatory field)\n");
+                        log_mandatory_fields += "\tAccession ID must be set! (mandatory field)\n";
                     }
                     if(line_splitted[index_publication_status] == null || line_splitted[index_publication_status].equals("")){
-                        logfile.write("Publication status must be set! (mandatory field)\n");
+                        log_mandatory_fields += "\tPublication status must be set! (mandatory field)\n";
                     }
                     if(line_splitted[index_author] == null || line_splitted[index_author].equals("")){
-                        logfile.write("Author must be set! (mandatory field)\n");
-                    }
-                    if(line_splitted[index_reference_genome] == null || line_splitted[index_reference_genome].equals("")){
-                        logfile.write("Reference genome must be set! (mandatory field)\n");
+                        log_mandatory_fields += "\tAuthor must be set! (mandatory field)\n";
                     }
                     if(line_splitted[index_data_type] == null || line_splitted[index_data_type].equals("")){
-                        logfile.write("Data type must be set! (mandatory field)\n");
+                        log_mandatory_fields += "\tData type must be set! (mandatory field)\n";
                     }
                     if(line_splitted[index_user_email] == null || line_splitted[index_user_email].equals("")){
-                        logfile.write("User Email must be set! (mandatory field)\n");
+                        log_mandatory_fields += "\tUser Email must be set! (mandatory field)\n";
                     }
 
                     // test presence and correctness-----------------------------------------------------------------------------------------------
 
+
                     if(index_doi != -1){
                         String doi = line_splitted[index_doi].toLowerCase();
                         if(doi.equals("")){
-                            errorline_missing_value += "Doi is missing.\n";
+                            log_missing_value += "\tDoi is missing.\n";
                         } else if(!doi.contains(".")){
-                            errorline_incorrect_format += "Doi is not in correct format: " + doi + "\n";
+                            log_incorrect_format += "\tDoi is not in correct format: " + doi + "\n";
+                        }
+                    }
+
+                    if(index_reference_genome != -1){
+                        String reference_genome = line_splitted[index_reference_genome].toLowerCase();
+                        if(reference_genome.equals("")){
+                            log_missing_value += "\tReference genome is missing.\n";
+                        } else if(!reference_genome.equals("rsrs") && !reference_genome.equals("rcrs") ){
+                            log_incorrect_format += "\tReference genome  is not in correct format: " + reference_genome + "\n";
                         }
                     }
 
                     if(index_mean_coverage != -1){
                         String number = line_splitted[index_mean_coverage];
                         if(number.equals("")){
-                            errorline_missing_value += "Mean coverage is missing.\n";
+                            log_missing_value += "\tMean coverage is missing.\n";
                         } else {
                             try {
                                 Double.parseDouble(number);
                             } catch(NumberFormatException e) {
-                                errorline_incorrect_format += "Mean coverage is not in correct format: " + number + "\n";
+                                log_incorrect_format += "\tMean coverage is not in correct format: " + number + "\n";
                             }
                         }
                     }
@@ -454,12 +466,12 @@ public class Validator {
                     if(index_std_dev_coverage != -1){
                         String number = line_splitted[index_std_dev_coverage];
                         if(number.equals("")){
-                            errorline_missing_value += "Coverage standard deviation is missing.\n";
+                            log_missing_value += "\tCoverage standard deviation is missing.\n";
                         } else {
                             try {
                                 Double.parseDouble(number);
                             } catch(NumberFormatException e) {
-                                errorline_incorrect_format += "Coverage standard deviation is not in correct format: " + number + "\n";
+                                log_incorrect_format += "\tCoverage standard deviation is not in correct format: " + number + "\n";
                             }
                         }
                     }
@@ -467,53 +479,53 @@ public class Validator {
                     if(index_minimum_coverage != -1){
                         String number = line_splitted[index_minimum_coverage];
                         if(number.equals("")){
-                            errorline_missing_value += "Minimum coverage is missing\n";
+                            log_missing_value += "\tMinimum coverage is missing\n";
                         } else if(!isStringInt(number)){
-                            errorline_incorrect_format += "Minimum coverage is not in correct format: " + number + "\n";
+                            log_incorrect_format += "\tMinimum coverage is not in correct format: " + number + "\n";
                         }
                     }
 
                     if(index_maximum_coverage != -1){
                         String number = line_splitted[index_maximum_coverage];
                         if(number.equals("")){
-                            errorline_missing_value += "Maximum coverage is missing\n";
+                            log_missing_value += "\tMaximum coverage is missing\n";
                         } else if(!isStringInt(number)){
-                            errorline_incorrect_format += "Maximum coverage is not in correct format: " + number + "\n";
+                            log_incorrect_format += "\tMaximum coverage is not in correct format: " + number + "\n";
                         }
                     }
 
                     if(index_starting_np != -1){
                         String number = line_splitted[index_starting_np];
                         if(number.equals("")){
-                            errorline_missing_value += "Starting position is missing\n";
+                            log_missing_value += "\tStarting position is missing\n";
                         } else if(!isStringInt(number)){
-                            errorline_incorrect_format += "Starting position is not in correct format: " + number + "\n";
+                            log_incorrect_format += "\tStarting position is not in correct format: " + number + "\n";
                         }
                     }
 
                     if(index_ending_np != -1){
                         String number = line_splitted[index_ending_np];
                         if(number.equals("")){
-                            errorline_missing_value += "Ending position is missing\n";
+                            log_missing_value += "\tEnding position is missing\n";
                         } else if(!isStringInt(number)){
-                            errorline_incorrect_format += "Ending position is not in correct format: " + number + "\n";
+                            log_incorrect_format += "\tEnding position is not in correct format: " + number + "\n";
                         }
                     }
 
                     if(index_data_type != -1){
                         String data_type = line_splitted[index_data_type].toLowerCase();
                         if(!data_type.equals("fullmt") && !data_type.equals("wholegenome")){
-                            errorline_incorrect_format += "Data type is not in correct format: " + data_type + "\n";
+                            log_incorrect_format += "\tData type is not in correct format: " + data_type + "\n";
                         }
                     }
 
                     if(index_age != -1){
                         String age = line_splitted[index_age].toLowerCase();
                         if (age.equals("")){
-                            errorline_missing_value += "Age is missing.\n";
+                            log_missing_value += "\tAge is missing.\n";
                         } else if(!isStringInt(age) && !age.equals("adult") && !age.equals("neonate") && !age.equals("subadult")
                                 && !age.equals("infant") && !age.contains("-") && !age.contains("+")){
-                            errorline_incorrect_format += "Age is not in correct format: " + age + "\n";
+                            log_incorrect_format += "\tAge is not in correct format: " + age + "\n";
                         }
                     }
 
@@ -521,28 +533,28 @@ public class Validator {
                     if(index_sex != -1){
                         String sex = line_splitted[index_sex].toLowerCase();
                         if (sex.equals("")){
-                            errorline_missing_value += "Sex is missing.\n";
+                            log_missing_value += "\tSex is missing.\n";
                         } else if(!sex.equals("f") && !sex.equals("m") && !sex.equals("u")){
-                            errorline_incorrect_format += "Sex is not in correct format: " + sex + "\n";
+                            log_incorrect_format += "\tSex is not in correct format: " + sex + "\n";
                         }
                     }
 
                     if(index_population_purpose != -1){
                         String population_purpose = line_splitted[index_population_purpose].toLowerCase();
                         if (population_purpose.equals("")){
-                            errorline_missing_value += "Population purpose is missing.\n";
+                            log_missing_value += "\tPopulation purpose is missing.\n";
                         } else if(!population_purpose.equals("true") && !population_purpose.equals("false") &&
                                 !population_purpose.equals("t") && !population_purpose.equals("f")){
-                            errorline_incorrect_format += "Population purpose is not in correct format: " + population_purpose + "\n";
+                            log_incorrect_format += "\tPopulation purpose is not in correct format: " + population_purpose + "\n";
                         }
                     }
 
                     if(index_access != -1){
                         String access = line_splitted[index_access].toLowerCase();
                         if (access.equals("")){
-                            errorline_missing_value += "Access is missing.\n";
+                            log_missing_value += "\tAccess is missing.\n";
                         } else if(!access.equals("private") && !access.equals("public") ){
-                            errorline_incorrect_format += "Access is not in correct format: " + access + "\n";
+                            log_incorrect_format += "\tAccess is not in correct format: " + access + "\n";
                         }
                     }
 
@@ -552,27 +564,27 @@ public class Validator {
                     if(index_geographic_info_TMA_inferred_region != -1){
                         String geographic_info_TMA_inferred_region = line_splitted[index_geographic_info_TMA_inferred_region].toLowerCase();
                         if (geographic_info_TMA_inferred_region.equals("")) {
-                            errorline_missing_value += "Geographic info TMA inferred region is missing.\n";
+                            log_missing_value += "\tGeographic info TMA inferred region is missing.\n";
                         } else if(!region.contains(geographic_info_TMA_inferred_region)){
-                            errorline_incorrect_format += "Geographic info TMA inferred region is not in correct format: " + geographic_info_TMA_inferred_region + "\n";
+                            log_incorrect_format += "\tGeographic info TMA inferred region is not in correct format: " + geographic_info_TMA_inferred_region + "\n";
                         }
                     }
 
                     if(index_geographic_info_TMA_inferred_subregion != -1){
                         String geographic_info_TMA_inferred_subregion = line_splitted[index_geographic_info_TMA_inferred_subregion].toLowerCase();
                         if (geographic_info_TMA_inferred_subregion.equals("")) {
-                            errorline_missing_value += "Geographic info TMA inferred subregion is missing.\n";
+                            log_missing_value += "\tGeographic info TMA inferred subregion is missing.\n";
                         } else if(!subregion.contains(geographic_info_TMA_inferred_subregion)){
-                            errorline_incorrect_format += "Geographic info TMA inferred subregion is not in correct format: " + geographic_info_TMA_inferred_subregion + "\n";
+                            log_incorrect_format += "\tGeographic info TMA inferred subregion is not in correct format: " + geographic_info_TMA_inferred_subregion + "\n";
                         }
                     }
 
                     if(index_geographic_info_TMA_inferred_intermediate_region != -1){
                         String geographic_info_TMA_inferred_intermediate_region = line_splitted[index_geographic_info_TMA_inferred_intermediate_region].toLowerCase();
                         if (geographic_info_TMA_inferred_intermediate_region.equals("")) {
-                            errorline_missing_value += "Geographic info TMA inferred intermediate region is missing.\n";
+                            log_missing_value += "\tGeographic info TMA inferred intermediate region is missing.\n";
                         } else if(!intermediate_region.contains(geographic_info_TMA_inferred_intermediate_region)){
-                            errorline_incorrect_format += "Geographic info TMA inferred intermediate region is not in correct format: " + geographic_info_TMA_inferred_intermediate_region + "\n";
+                            log_incorrect_format += "\tGeographic info TMA inferred intermediate region is not in correct format: " + geographic_info_TMA_inferred_intermediate_region + "\n";
                         }
                     }
 
@@ -580,21 +592,21 @@ public class Validator {
                     if(index_geographic_info_TMA_inferred_country != -1){
                         String geographic_info_TMA_inferred_country = line_splitted[index_geographic_info_TMA_inferred_country];
                         if (geographic_info_TMA_inferred_country.equals("")) {
-                            errorline_missing_value += "Geographic info TMA inferred country is missing.\n";
+                            log_missing_value += "\tGeographic info TMA inferred country is missing.\n";
                         } else if(!country.contains(geographic_info_TMA_inferred_country)){
-                            errorline_incorrect_format += "Geographic info TMA inferred country is not in correct format: " + geographic_info_TMA_inferred_country + "\n";
+                            log_incorrect_format += "\tGeographic info TMA inferred country is not in correct format: " + geographic_info_TMA_inferred_country + "\n";
                         }
                     }
 
                     if(index_geographic_info_TMA_inferred_latitude != -1){
                         String number = line_splitted[index_geographic_info_TMA_inferred_latitude];
                         if(number.equals("")){
-                            errorline_missing_value += "Geographic info TMA inferred latitude is missing.\n";
+                            log_missing_value += "\tGeographic info TMA inferred latitude is missing.\n";
                         } else {
                             try {
                                 Double.parseDouble(number);
                             } catch(NumberFormatException e) {
-                                errorline_incorrect_format += "Geographic info TMA inferred latitude is not in correct format: " + number + "\n";
+                                log_incorrect_format += "\tGeographic info TMA inferred latitude is not in correct format: " + number + "\n";
                             }
                         }
                     }
@@ -602,12 +614,12 @@ public class Validator {
                     if(index_geographic_info_TMA_inferred_longitude != -1){
                         String number = line_splitted[index_geographic_info_TMA_inferred_longitude];
                         if(number.equals("")){
-                            errorline_missing_value += "Geographic info TMA inferred longitude is missing.\n";
+                            log_missing_value += "\tGeographic info TMA inferred longitude is missing.\n";
                         } else {
                             try {
                                 Double.parseDouble(number);
                             } catch(NumberFormatException e) {
-                                errorline_incorrect_format += "Geographic info TMA inferred longitude is not in correct format: " + number + "\n";
+                                log_incorrect_format += "\tGeographic info TMA inferred longitude is not in correct format: " + number + "\n";
                             }
                         }
                     }
@@ -620,9 +632,9 @@ public class Validator {
                     if(index_sample_origin_region != -1){
                         String sample_origin_region = line_splitted[index_sample_origin_region].toLowerCase();
                         if (sample_origin_region.equals("")) {
-                            errorline_missing_value += "Sample origin region is missing.\n";
+                            log_missing_value += "\tSample origin region is missing.\n";
                         } else if(!region.contains(sample_origin_region)){
-                            errorline_incorrect_format +="Sample origin region is not in correct format: " + sample_origin_region + "\n";
+                            log_incorrect_format +="\tSample origin region is not in correct format: " + sample_origin_region + "\n";
                         }
                     }
 
@@ -630,27 +642,27 @@ public class Validator {
                     if(index_sample_origin_subregion != -1){
                         String sample_origin_subregion = line_splitted[index_sample_origin_subregion].toLowerCase();
                         if (sample_origin_subregion.equals("")) {
-                            errorline_missing_value += "Sample origin subregion is missing.\n";
+                            log_missing_value += "\tSample origin subregion is missing.\n";
                         } else if(!subregion.contains(sample_origin_subregion)){
-                            errorline_incorrect_format += "Sample origin subregion is not in correct format: "+ sample_origin_subregion + "\n";
+                            log_incorrect_format += "\tSample origin subregion is not in correct format: "+ sample_origin_subregion + "\n";
                         }
                     }
 
                     if(index_sample_origin_intermediate_region != -1){
                         String sample_origin_intermediate_region = line_splitted[index_sample_origin_intermediate_region].toLowerCase();
                         if (sample_origin_intermediate_region.equals("")) {
-                            errorline_missing_value += "Sample origin intermediate region is missing.\n";
+                            log_missing_value += "\tSample origin intermediate region is missing.\n";
                         } else if(!intermediate_region.contains(sample_origin_intermediate_region)){
-                            errorline_incorrect_format += "Sample origin intermediate region is not in correct format: " + sample_origin_intermediate_region + "\n";
+                            log_incorrect_format += "\tSample origin intermediate region is not in correct format: " + sample_origin_intermediate_region + "\n";
                         }
                     }
 
                     if(index_sample_origin_country != -1){
                         String sample_origin_country = line_splitted[index_sample_origin_country];
                         if (sample_origin_country.equals("")) {
-                            errorline_missing_value += "Sample origin country is missing.\n";
+                            log_missing_value += "\tSample origin country is missing.\n";
                         } else if(!country.contains(sample_origin_country)){
-                            errorline_incorrect_format += "Sample origin country is not in correct format: " + sample_origin_country + "\n";
+                            log_incorrect_format += "\tSample origin country is not in correct format: " + sample_origin_country + "\n";
                         }
                     }
 
@@ -658,12 +670,12 @@ public class Validator {
                     if(index_sample_origin_latitude != -1){
                         String number = line_splitted[index_sample_origin_latitude];
                         if(number.equals("")){
-                            errorline_missing_value += "Sample origin latitude is missing.\n";
+                            log_missing_value += "\tSample origin latitude is missing.\n";
                         } else {
                             try {
                                 Double.parseDouble(number);
                             } catch(NumberFormatException e) {
-                                errorline_incorrect_format += "Sample origin latitude is not in correct format: " + number + "\n";
+                                log_incorrect_format += "\tSample origin latitude is not in correct format: " + number + "\n";
                             }
                         }
                     }
@@ -671,12 +683,12 @@ public class Validator {
                     if(index_sample_origin_longitude != -1){
                         String number = line_splitted[index_sample_origin_longitude];
                         if(number.equals("")){
-                            errorline_missing_value += "Sample origin longitude is missing.\n";
+                            log_missing_value += "\tSample origin longitude is missing.\n";
                         } else {
                             try {
                                 Double.parseDouble(number);
                             } catch(NumberFormatException e) {
-                                errorline_incorrect_format += "Sample origin longitude is not in correct format: " + number + "\n";
+                                log_incorrect_format += "\tSample origin longitude is not in correct format: " + number + "\n";
                             }
                         }
                     }
@@ -688,18 +700,18 @@ public class Validator {
                     if(index_sampling_region != -1){
                         String sampling_region = line_splitted[index_sampling_region].toLowerCase();
                         if (sampling_region.equals("")) {
-                            errorline_missing_value += "Sampling region is missing.\n";
+                            log_missing_value += "\tSampling region is missing.\n";
                         } else if(!region.contains(sampling_region)){
-                            errorline_incorrect_format += "Sampling region is not in correct format: "+ sampling_region + "\n";
+                            log_incorrect_format += "\tSampling region is not in correct format: "+ sampling_region + "\n";
                         }
                     }
 
                     if(index_sampling_subregion != -1){
                         String sampling_subregion = line_splitted[index_sampling_subregion].toLowerCase();
                         if (sampling_subregion.equals("")) {
-                            errorline_missing_value += "Sampling subregion is missing.\n";
+                            log_missing_value += "\tSampling subregion is missing.\n";
                         } else if(!subregion.contains(sampling_subregion)){
-                            errorline_incorrect_format += "Sampling subregion is not in correct format: "+ sampling_subregion + "\n";
+                            log_incorrect_format += "\tSampling subregion is not in correct format: "+ sampling_subregion + "\n";
                         }
                     }
 
@@ -707,30 +719,30 @@ public class Validator {
                     if(index_sampling_intermediate_region != -1){
                         String sampling_intermediate_region = line_splitted[index_sampling_intermediate_region].toLowerCase();
                         if (sampling_intermediate_region.equals("")) {
-                            errorline_missing_value += "Sampling intermediate region is missing.\n";
+                            log_missing_value += "\tSampling intermediate region is missing.\n";
                         } else if(!intermediate_region.contains(sampling_intermediate_region)){
-                            errorline_incorrect_format += "Sampling intermediate region is not in correct format: "+ sampling_intermediate_region + "\n";
+                            log_incorrect_format += "\tSampling intermediate region is not in correct format: "+ sampling_intermediate_region + "\n";
                         }
                     }
 
                     if(index_sampling_country != -1){
                         String sampling_contry = line_splitted[index_sampling_country];
                         if (sampling_contry.equals("")) {
-                            errorline_missing_value += "Sampling country is missing.\n";
+                            log_missing_value += "\tSampling country is missing.\n";
                         } else if(!country.contains(sampling_contry)){
-                            errorline_incorrect_format += "Sampling country is not in correct format: "+ sampling_contry + "\n";
+                            log_incorrect_format += "\tSampling country is not in correct format: "+ sampling_contry + "\n";
                         }
                     }
 
                     if(index_sampling_latitude != -1){
                         String number = line_splitted[index_sampling_latitude];
                         if(number.equals("")){
-                            errorline_missing_value += "Sampling latitude is missing.\n";
+                            log_missing_value += "\tSampling latitude is missing.\n";
                         } else {
                             try {
                                 Double.parseDouble(number);
                             } catch(NumberFormatException e) {
-                                errorline_incorrect_format += "Sampling latitude is not in correct format: " + number + "\n";
+                                log_incorrect_format += "\tSampling latitude is not in correct format: " + number + "\n";
                             }
                         }
                     }
@@ -738,12 +750,12 @@ public class Validator {
                     if(index_sampling_longitude != -1){
                         String number = line_splitted[index_sampling_longitude];
                         if(number.equals("")){
-                            errorline_missing_value += "Sampling longitude is missing.\n";
+                            log_missing_value += "\tSampling longitude is missing.\n";
                         } else {
                             try {
                                 Double.parseDouble(number);
                             } catch(NumberFormatException e) {
-                                errorline_incorrect_format += "Sampling longitude is not in correct format: " + number + "\n";
+                                log_incorrect_format += "\tSampling longitude is not in correct format: " + number + "\n";
                             }
                         }
                     }
@@ -753,9 +765,9 @@ public class Validator {
                     if(index_generations_to_TMA != -1){
                         String number = line_splitted[index_generations_to_TMA];
                         if(number.equals("")){
-                            errorline_missing_value += "Generations to TMA is missing\n";
+                            log_missing_value += "\tGenerations to TMA is missing\n";
                         } else if(!isStringInt(number)){
-                            errorline_incorrect_format += "Generations to TMA is not in correct format: " + number + "\n";
+                            log_incorrect_format += "\tGenerations to TMA is not in correct format: " + number + "\n";
                         }
                     }
 
@@ -763,61 +775,61 @@ public class Validator {
                     if(index_publication_status != -1){
                         String publication_status = line_splitted[index_publication_status].toLowerCase();
                         if(publication_status.equals("")){
-                            errorline_missing_value += "Publication status is missing.\n";
+                            log_missing_value += "\tPublication status is missing.\n";
                         } else if(!publication_status.equals("published") && !publication_status.equals("protected")
                                 && !publication_status.equals("private") && !publication_status.equals("in press")
                                 && !publication_status.equals("in preparation") && !publication_status.equals("submitted")){
-                            errorline_incorrect_format += "Publication status is not in correct format: " + publication_status + "\n";
+                            log_incorrect_format += "\tPublication status is not in correct format: " + publication_status + "\n";
                         }
                     }
 
                     if(index_publication_date != -1){
                         if(line_splitted[index_publication_date].equals("")){
-                            errorline_missing_value += "Publication date is missing.\n";
+                            log_missing_value += "\tPublication date is missing.\n";
                         } else if(!isDateValid(line_splitted[index_publication_date])){
-                            errorline_incorrect_format += "Publication date is not in correct format: " + line_splitted[index_publication_date] + "\n";
+                            log_incorrect_format += "\tPublication date is not in correct format: " + line_splitted[index_publication_date] + "\n";
                         }
                     }
 
                     if(index_sampling_date != -1){
 
                         if(line_splitted[index_sampling_date].equals("")){
-                            errorline_missing_value += "Sampling date is missing.\n";
+                            log_missing_value += "\tSampling date is missing.\n";
                         } else if(!isDateValid(line_splitted[index_sampling_date])){
-                            errorline_incorrect_format += "Sampling date is not in correct format: " + line_splitted[index_sampling_date] + "\n";
+                            log_incorrect_format += "\tSampling date is not in correct format: " + line_splitted[index_sampling_date] + "\n";
                         }
                     }
 
                     if(index_reference_genome != -1){
                         String reference_genome = line_splitted[index_reference_genome].toLowerCase();
                         if(reference_genome.equals("")){
-                            errorline_missing_value += "Reference genome is missing.\n";
+                            log_missing_value += "\tReference genome is missing.\n";
                         } else if(!reference_genome.equals("rsrs") && !reference_genome.equals("rcrs")){
-                            errorline_incorrect_format += "Reference genome is not in correct format: " + reference_genome + "\n";
+                            log_incorrect_format += "\tReference genome is not in correct format: " + reference_genome + "\n";
                         }
                     }
 
                     if(index_user_email != -1){
                         String user_email = line_splitted[index_user_email].toLowerCase();
-                        if(!user_email.contains("@")){
-                            errorline_incorrect_format += "User email is not in correct format: " + user_email + "\n";
+                        if(!user_email.contains("@") && !user_email.contains(".")){
+                            log_incorrect_format += "\tUser email is not in correct format: " + user_email + "\n";
                         }
                     }
                     if(index_publication_type != -1){
                         String publicationType = line_splitted[index_publication_type].toLowerCase();
                         if(publicationType.equals("")){
-                            errorline_missing_value += "Publication type is missing.\n";
+                            log_missing_value += "\tPublication type is missing.\n";
                         } else if(!publication_type.contains(publicationType.toLowerCase())){
-                            errorline_incorrect_format += "Publication type is not in correct format: " + publicationType + "\n";
+                            log_incorrect_format += "\tPublication type is not in correct format: " + publicationType + "\n";
                         }
                     }
 
                     if(index_publication_status != -1){
                         String publicationStatus = line_splitted[index_publication_status].toLowerCase();
                         if(publicationStatus.equals("")){
-                            errorline_missing_value += "Publication status is missing.\n";
+                            log_missing_value += "\tPublication status is missing.\n";
                         } else if(!publication_status.contains(publicationStatus.toLowerCase())){
-                            errorline_incorrect_format += "Publication status is not in correct format: " + publicationStatus + "\n";
+                            log_incorrect_format += "\tPublication status is not in correct format: " + publicationStatus + "\n";
                         }
                     }
 
@@ -825,18 +837,18 @@ public class Validator {
                     if(index_sequencing_platform != -1){
                         String publicationPlatform = line_splitted[index_sequencing_platform].toLowerCase();
                         if(publicationPlatform.equals("")){
-                            errorline_missing_value += "Sequencing platform is missing.\n";
+                            log_missing_value += "\tSequencing platform is missing.\n";
                         } else if(!sequencing_platform.contains(publicationPlatform)){
-                            errorline_incorrect_format += "Sequencing platform is not in correct format: " + publicationPlatform + "\n";
+                            log_incorrect_format += "\tSequencing platform is not in correct format: " + publicationPlatform + "\n";
                         }
                     }
 
                     if(index_calibrated_date_range_from != -1){
                         String calibrated_date_range_from = line_splitted[index_calibrated_date_range_from].toLowerCase();
                         if(calibrated_date_range_from.equals("")){
-                            errorline_missing_value += "Calibrated date lower limit is missing.\n";
+                            log_missing_value += "\tCalibrated date lower limit is missing.\n";
                         } else if(!isStringInt(calibrated_date_range_from)){
-                            errorline_incorrect_format += "Calibrated date lower limit is not in correct format: " + calibrated_date_range_from + "\n";
+                            log_incorrect_format += "\tCalibrated date lower limit is not in correct format: " + calibrated_date_range_from + "\n";
                         }
                     }
 
@@ -844,31 +856,72 @@ public class Validator {
                     if(index_calibrated_date_range_to != -1){
                         String calibrated_date_range_to = line_splitted[index_calibrated_date_range_to].toLowerCase();
                         if(calibrated_date_range_to.equals("")){
-                            errorline_missing_value += "Calibrated date upper limit is missing.\n";
+                            log_missing_value += "\tCalibrated date upper limit is missing.\n";
                         } else if(!isStringInt(calibrated_date_range_to)){
-                            errorline_incorrect_format += "Calibrated date upper limit is not in correct format: " + calibrated_date_range_to + "\n";
+                            log_incorrect_format += "\tCalibrated date upper limit is not in correct format: " + calibrated_date_range_to + "\n";
                         }
                     }
 
                     if(index_C14_age_BP != -1){
                         String c14_age_bp = line_splitted[index_C14_age_BP].toLowerCase();
                         if(c14_age_bp.equals("")){
-                            errorline_missing_value += "C14 date BP is missing.\n";
+                            log_missing_value += "\tC14 date BP is missing.\n";
                         } else if(!c14_age_bp.contains("+-")){
-                            errorline_incorrect_format += "C14 date BP is not in correct format: " + c14_age_bp + "\n";
+                            log_incorrect_format += "\tC14 date BP is not in correct format: " + c14_age_bp + "\n";
                         }
                     }
 
-                    logfile.write("\nMissing values:\n\n");
-                    logfile.write(errorline_missing_value);
-
-                    logfile.write("\nIncorrect values:\n\n");
-                    logfile.write(errorline_incorrect_format);
-
-                    logfile.write("\n---------------------------------------------------\n");
-
                 }
             }
+
+
+            //logfile.write("Missing attributes (columns) in the meta information file: \n");
+
+            if(log_incorrect_format.equals(string_accession_default)){
+                logfile.write("\nAll values are correct. Upload possible.\n\n");
+            } else {
+                logfile.write("Incorrect values:\n" + log_incorrect_format);
+            }
+
+            logfile.write("=========================================================\n");
+
+
+
+            if(log_missing_columns.equals("")){
+                logfile.write("No columns missing\n");
+            } else {
+                logfile.write("Missing columns:\n" + log_missing_columns);
+            }
+
+            logfile.write("=========================================================\n");
+
+            if(log_mandatory_fields.equals(string_accession_default)){
+                logfile.write("All mandatory fields set\n");
+            } else {
+                logfile.write("Missing mandatory entry:\n" + log_mandatory_fields);
+            }
+
+            logfile.write("=========================================================\n");
+
+            if(log_missing_sequences.equals("")&& count_meta == count_sequences){
+                logfile.write("No fasta sequences missing" + "\n# Sequences: "
+                        + count_sequences + "\n# Meta info: " + count_meta + "\n");
+            } else if (count_meta != count_sequences){
+                logfile.write("Warning!! Number of sequences and meta data does not match!\nNumber of sequences in fasta file: " + count_sequences);
+                logfile.write("\nNumber of meta information in csv file: " + count_meta);
+            } else {
+                logfile.write("Missing fasta sequences:\n" + log_missing_sequences);
+            }
+            logfile.write("=========================================================\n");
+
+
+
+            if(log_missing_value.equals(string_accession_default)){
+                logfile.write("No missing values\n");
+            } else {
+                logfile.write("Missing (but not mandatory) values:\n" + log_missing_value);
+            }
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -900,16 +953,14 @@ public class Validator {
         }
     }
 
-    public static boolean isDateValid(String date)
-    {
-        String DATE_FORMAT = "yyyy-mm-dd";
-        try {
-            DateFormat df = new SimpleDateFormat(DATE_FORMAT);
-            df.setLenient(false);
-            df.parse(date);
-            return true;
-        } catch (ParseException e) {
+    public boolean isDateValid(String date) {
+
+        if(!isStringInt(date)){
             return false;
+        } else if(Integer.parseInt(date) >  Calendar.getInstance().get(Calendar.YEAR)){
+            return false;
+        } else {
+            return true;
         }
     }
 }
