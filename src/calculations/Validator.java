@@ -59,19 +59,20 @@ public class Validator {
             "LIE","LUX","MCO","NLD","CHE","AUS","CXR","CCK","HMD","NZL","NFK","FJI","NCL","PNG","SLB","VUT","GUM","KIR",
             "MHL","FSM","NRU","MNP","PLW","UMI","ASM","COK","PYF","NIU","PCN","WSM","TKL","TON","TUV","WLF");
 
-    private List<String> region = Arrays.asList("Africa", "Americas", "Antarctica", "Asia", "Europe", "Oceania");
-    private List<String> subregion = Arrays.asList("Northern Africa", "Sub-Saharan Africa", "Latin America and the Caribbean",
-            "Northern America", "Central Asia", "Eastern Asia", "South-eastern Asia", "Southern Asia", "Western Asia",
-            "Eastern Europe", "Northern Europe", "Southern Europe", "Western Europe", "Australia and New Zealand",
-            "Melanesia", "Micronesia", "Polynesia");
+    private List<String> region = Arrays.asList("africa", "americas", "antarctica", "asia", "europe", "oceania");
+    private List<String> subregion = Arrays.asList("northern africa", "sub-saharan africa", "latin america and the caribbean",
+            "northern america", "central asia", "eastern asia", "south-eastern asia", "southern asia", "western asia",
+            "eastern europe", "northern europe", "southern europe", "western europe", "australia and new zealand",
+            "melanesia", "micronesia", "polynesia");
 
 
-    private List<String> intermediate_region = Arrays.asList("Eastern Africa", "Middle Africa", "Southern Africa",
-            "Western Africa", "Caribbean", "Central America", "South America", "Channel Islands");
+    private List<String> intermediate_region = Arrays.asList("eastern africa", "middle africa", "southern africa",
+            "western africa", "caribbean", "central america", "south america", "channel islands");
 
-    private List<String> publication_type = Arrays.asList("paper","peerPrint","direct submission to genbank","direct submission to mitoDB","article");
-    private List<String> publication_status = Arrays.asList("published","protected","private","in press","in preparation","submitted");
-    private List<String> sequencing_platform = Arrays.asList("Illumina","454","sanger","nanopore","pacbio");
+    private List<String> publication_type = Arrays.asList("paper","peerprint","direct submission to genbank","direct submission to mitoDB","article");
+    private List<String> publication_status = Arrays.asList("published","protected","private","in press",
+            "in preparation","submitted","unpublished");
+    private List<String> sequencing_platform = Arrays.asList("illumina","454","sanger","nanopore","pacbio");
 
 
     public boolean validate(String data_template, BufferedWriter logfile, List<String> fastaheaders) {
@@ -413,8 +414,8 @@ public class Validator {
                     if(line_splitted[index_publication_status] == null || line_splitted[index_publication_status].equals("")){
                         logfile.write("Publication status must be set! (mandatory field)\n");
                     }
-                    if(line_splitted[index_doi] == null || line_splitted[index_doi].equals("")){
-                        logfile.write("DOI must be set! (mandatory field)\n");
+                    if(line_splitted[index_author] == null || line_splitted[index_author].equals("")){
+                        logfile.write("Author must be set! (mandatory field)\n");
                     }
                     if(line_splitted[index_reference_genome] == null || line_splitted[index_reference_genome].equals("")){
                         logfile.write("Reference genome must be set! (mandatory field)\n");
@@ -430,7 +431,9 @@ public class Validator {
 
                     if(index_doi != -1){
                         String doi = line_splitted[index_doi].toLowerCase();
-                        if(!doi.contains(".")){
+                        if(doi.equals("")){
+                            errorline_missing_value += "Doi is missing.\n";
+                        } else if(!doi.contains(".")){
                             errorline_incorrect_format += "Doi is not in correct format: " + doi + "\n";
                         }
                     }
@@ -547,7 +550,7 @@ public class Validator {
                     // GEOGRAPHIC INFO - TMA INFERRED
 
                     if(index_geographic_info_TMA_inferred_region != -1){
-                        String geographic_info_TMA_inferred_region = line_splitted[index_geographic_info_TMA_inferred_region];
+                        String geographic_info_TMA_inferred_region = line_splitted[index_geographic_info_TMA_inferred_region].toLowerCase();
                         if (geographic_info_TMA_inferred_region.equals("")) {
                             errorline_missing_value += "Geographic info TMA inferred region is missing.\n";
                         } else if(!region.contains(geographic_info_TMA_inferred_region)){
@@ -556,7 +559,7 @@ public class Validator {
                     }
 
                     if(index_geographic_info_TMA_inferred_subregion != -1){
-                        String geographic_info_TMA_inferred_subregion = line_splitted[index_geographic_info_TMA_inferred_subregion];
+                        String geographic_info_TMA_inferred_subregion = line_splitted[index_geographic_info_TMA_inferred_subregion].toLowerCase();
                         if (geographic_info_TMA_inferred_subregion.equals("")) {
                             errorline_missing_value += "Geographic info TMA inferred subregion is missing.\n";
                         } else if(!subregion.contains(geographic_info_TMA_inferred_subregion)){
@@ -565,7 +568,7 @@ public class Validator {
                     }
 
                     if(index_geographic_info_TMA_inferred_intermediate_region != -1){
-                        String geographic_info_TMA_inferred_intermediate_region = line_splitted[index_geographic_info_TMA_inferred_intermediate_region];
+                        String geographic_info_TMA_inferred_intermediate_region = line_splitted[index_geographic_info_TMA_inferred_intermediate_region].toLowerCase();
                         if (geographic_info_TMA_inferred_intermediate_region.equals("")) {
                             errorline_missing_value += "Geographic info TMA inferred intermediate region is missing.\n";
                         } else if(!intermediate_region.contains(geographic_info_TMA_inferred_intermediate_region)){
@@ -615,7 +618,7 @@ public class Validator {
 
 
                     if(index_sample_origin_region != -1){
-                        String sample_origin_region = line_splitted[index_sample_origin_region];
+                        String sample_origin_region = line_splitted[index_sample_origin_region].toLowerCase();
                         if (sample_origin_region.equals("")) {
                             errorline_missing_value += "Sample origin region is missing.\n";
                         } else if(!region.contains(sample_origin_region)){
@@ -625,7 +628,7 @@ public class Validator {
 
 
                     if(index_sample_origin_subregion != -1){
-                        String sample_origin_subregion = line_splitted[index_sample_origin_subregion];
+                        String sample_origin_subregion = line_splitted[index_sample_origin_subregion].toLowerCase();
                         if (sample_origin_subregion.equals("")) {
                             errorline_missing_value += "Sample origin subregion is missing.\n";
                         } else if(!subregion.contains(sample_origin_subregion)){
@@ -634,7 +637,7 @@ public class Validator {
                     }
 
                     if(index_sample_origin_intermediate_region != -1){
-                        String sample_origin_intermediate_region = line_splitted[index_sample_origin_intermediate_region];
+                        String sample_origin_intermediate_region = line_splitted[index_sample_origin_intermediate_region].toLowerCase();
                         if (sample_origin_intermediate_region.equals("")) {
                             errorline_missing_value += "Sample origin intermediate region is missing.\n";
                         } else if(!intermediate_region.contains(sample_origin_intermediate_region)){
@@ -683,7 +686,7 @@ public class Validator {
                     // GEOGRAPHIC INFO - SAMPLING
 
                     if(index_sampling_region != -1){
-                        String sampling_region = line_splitted[index_sampling_region];
+                        String sampling_region = line_splitted[index_sampling_region].toLowerCase();
                         if (sampling_region.equals("")) {
                             errorline_missing_value += "Sampling region is missing.\n";
                         } else if(!region.contains(sampling_region)){
@@ -692,7 +695,7 @@ public class Validator {
                     }
 
                     if(index_sampling_subregion != -1){
-                        String sampling_subregion = line_splitted[index_sampling_subregion];
+                        String sampling_subregion = line_splitted[index_sampling_subregion].toLowerCase();
                         if (sampling_subregion.equals("")) {
                             errorline_missing_value += "Sampling subregion is missing.\n";
                         } else if(!subregion.contains(sampling_subregion)){
@@ -702,7 +705,7 @@ public class Validator {
 
 
                     if(index_sampling_intermediate_region != -1){
-                        String sampling_intermediate_region = line_splitted[index_sampling_intermediate_region];
+                        String sampling_intermediate_region = line_splitted[index_sampling_intermediate_region].toLowerCase();
                         if (sampling_intermediate_region.equals("")) {
                             errorline_missing_value += "Sampling intermediate region is missing.\n";
                         } else if(!intermediate_region.contains(sampling_intermediate_region)){
@@ -804,7 +807,7 @@ public class Validator {
                         String publicationType = line_splitted[index_publication_type].toLowerCase();
                         if(publicationType.equals("")){
                             errorline_missing_value += "Publication type is missing.\n";
-                        } else if(!publication_type.contains(publicationType)){
+                        } else if(!publication_type.contains(publicationType.toLowerCase())){
                             errorline_incorrect_format += "Publication type is not in correct format: " + publicationType + "\n";
                         }
                     }
@@ -813,7 +816,7 @@ public class Validator {
                         String publicationStatus = line_splitted[index_publication_status].toLowerCase();
                         if(publicationStatus.equals("")){
                             errorline_missing_value += "Publication status is missing.\n";
-                        } else if(!publication_status.contains(publicationStatus)){
+                        } else if(!publication_status.contains(publicationStatus.toLowerCase())){
                             errorline_incorrect_format += "Publication status is not in correct format: " + publicationStatus + "\n";
                         }
                     }
