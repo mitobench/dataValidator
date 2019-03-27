@@ -77,7 +77,7 @@ public class FastaReader {
         for (int i=0; i< seq.size(); i++)
         {
             String acc = (String) desc.get(i);
-            description[i] = acc.split(" ")[0];
+            description[i] = acc.split(" ")[0].split("\\.")[0];
             sequence[i]=(String) seq.get(i);
         }
 
@@ -85,7 +85,7 @@ public class FastaReader {
 
     private boolean isSequenceValid(String seq) {
 
-        String specialCharacters = "[" + "ACGTUWSMKRYBDHVNZ"+ "]+" ;
+        String specialCharacters = "[" + "ACGTUWSMKRYBDHVNZacgtuwsmkrybdhvnz"+ "]+" ;
 
         if (seq.matches(specialCharacters)) {
             return true;

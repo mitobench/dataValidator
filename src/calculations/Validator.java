@@ -70,7 +70,7 @@ public class Validator {
     private List<String> publication_type = Arrays.asList("paper","peerprint","direct submission to genbank","direct submission to mitoDB","article");
     private List<String> publication_status = Arrays.asList("published","protected","private","in press",
             "in preparation","submitted","unpublished");
-    private List<String> sequencing_platform = Arrays.asList("illumina","454","sanger","nanopore","pacbio");
+    private List<String> sequencing_platform = Arrays.asList("illumina","454","sanger","nanopore","pacbio", "affymetrix");
 
 
     private String log_missing_sequences="";
@@ -408,7 +408,7 @@ public class Validator {
                     string_accession_default += "--------------------------------------------------\n" + accession + ":\n";
 
 
-                    if(!fastaheaders.contains(accession)){
+                    if(!fastaheaders.contains(accession.split("\\.")[0])){
                         log_missing_sequences += "Sequence with this accession ID: "+ accession +" does not exist in fasta file.\n";
                     }
 
@@ -565,7 +565,7 @@ public class Validator {
                         String geographic_info_TMA_inferred_region = line_splitted[index_geographic_info_TMA_inferred_region].toLowerCase();
                         if (geographic_info_TMA_inferred_region.equals("")) {
                             log_missing_value += "\tGeographic info TMA inferred region is missing.\n";
-                        } else if(!region.contains(geographic_info_TMA_inferred_region)){
+                        } else if(!region.contains(geographic_info_TMA_inferred_region) || !isStringInt(geographic_info_TMA_inferred_region)){
                             log_incorrect_format += "\tGeographic info TMA inferred region is not in correct format: " + geographic_info_TMA_inferred_region + "\n";
                         }
                     }

@@ -20,6 +20,7 @@ public class Main {
         // init functionality
         ArgumentParser optionsParser = new ArgumentParser(args);
         Validator validator = new Validator();
+        System.out.println("Reading fast file...");
 
         mt_sequences_filepath = optionsParser.getFasta();
         String[] fileName = mt_sequences_filepath.replaceFirst("[.][^.]+$", "").split("/");
@@ -33,6 +34,8 @@ public class Main {
         List<String> fastaheaders = fastaReader.getDescription();
 
         logfile.write("Data validation report based on files:\n" + mt_sequences_filepath + "\n"+ data_template_filepath + "\n\n");
+
+        System.out.println("Running validation...");
 
         validator.validate(data_template_filepath, logfile, fastaheaders, fastaReader.getLog_sequence_corretness());
         logfile.close();
