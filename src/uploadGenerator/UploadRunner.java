@@ -4,13 +4,13 @@ package uploadGenerator;
 import uploadGenerator.calculations.Calculator;
 import uploadGenerator.calculations.HaplotypeCaller;
 import uploadGenerator.calculations.LocationCompleter;
-import uploadGenerator.io.FastaReader;
 import uploadGenerator.io.HSDParser;
 import uploadGenerator.io.MetaInfoReader;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,8 +18,8 @@ public class UploadRunner {
 
     private static HashMap<String, String> header_to_fastaSequence_map = null;
 
-    public void run(String metaInfo_path, String sequences_path, String out_path) throws Exception {
 
+    public void run(String metaInfo_path, String sequences_path, String out_path, validator.IO.FastaReader fastaReader) throws Exception {
 
         LocationCompleter locationCompleter = new LocationCompleter();
         Calculator calculator = new Calculator();
@@ -27,8 +27,6 @@ public class UploadRunner {
         String[] fileName = sequences_path.replaceFirst("[.][^.]+$", "").split("/");
         String fileNameWithoutExt = fileName[fileName.length-1];
 
-        BufferedWriter data_upload_query_sequences_file = new BufferedWriter(new FileWriter(out_path +
-                fileNameWithoutExt + "_data_upload_queries_sequences.sql"));
         BufferedWriter data_upload_query_meta_file = new BufferedWriter(new FileWriter(out_path +
                 fileNameWithoutExt + "_data_upload_queries_meta.sql"));
 
@@ -37,33 +35,28 @@ public class UploadRunner {
         // read fasta file and write upload queries
         if(sequences_path != null){
             header_to_fastaSequence_map = new HashMap<>();
-            FastaReader fastaReader = new FastaReader(sequences_path);
+            //FastaReader fastaReader = new FastaReader(sequences_path);
             fastaReader.parseFasta();
             header_to_fastaSequence_map = fastaReader.getSequenceMap();
 
-            for(String accession : header_to_fastaSequence_map.keySet()){
-                update_query = accession + "='" + header_to_fastaSequence_map.get(accession) + "'";
-                data_upload_query_sequences_file.write("insert into sequences (accession_id, mt_sequence) values ('"
-                        + accession + "','" + header_to_fastaSequence_map.get(accession) +"') ON CONFLICT (accession_id) DO UPDATE SET accession_id='" +
-
-                        accession + "',mt_sequence='" + header_to_fastaSequence_map.get(accession) + "';\n");
-            }
         }
 
 
         // parse meta info csv file and complete them
         boolean isheaderWritter = false;
 
-
         //calculate haplogroups / haplotypes
         HaplotypeCaller haplotypeCaller = new HaplotypeCaller(header_to_fastaSequence_map);
         haplotypeCaller.call(sequences_path);
 
         HSDParser hsdParser = new HSDParser();
-        hsdParser.parseFile("haplogroups.hsd");
-        HashMap<String, ArrayList<String>> entryList = hsdParser.getEntryList();
+        HashMap<String, ArrayList<String>> entryList = null;
+        if(Files.exists(new File("haplogroups.hsd").toPath())){
+            hsdParser.parseFile("haplogroups.hsd");
+            entryList = hsdParser.getEntryList();
+            haplotypeCaller.deleteTmpFiles();
+        }
 
-        haplotypeCaller.deleteTmpFiles();
 
 
         // init reader
@@ -76,14 +69,13 @@ public class UploadRunner {
         locationCompleter.setIndexes();
 
         ArrayList<String> entries = metaInfoReader.getEntry_list();
-        // get indexes of locations
-
 
         for (String entry : entries) {
             String[] meta_info = entry.split(",", types.length);
 
             // calculate stats
-            String accessionID = meta_info[metaInfoReader.getAccessionIDIndex()].replace("\"","");
+            String accessionID_with_version = meta_info[metaInfoReader.getAccessionIDIndex()].replace("\"","");
+            String accessionID = accessionID_with_version.split("\\.")[0];
             String sequence = header_to_fastaSequence_map.get(accessionID);
 
             double completeness = -1;
@@ -91,14 +83,32 @@ public class UploadRunner {
             if(sequence!=null){
                 completeness = calculator.calculateCompleteness(sequence);
                 percentageOfN = calculator.calculatePercentageOfN(sequence);
+            } else {
+                System.out.println("Sequence not in fasta: " + accessionID);
             }
 
 
             // determine user alias
             String user_alias = meta_info[metaInfoReader.getUserFirstNameIndex()].trim() + "" + meta_info[metaInfoReader.getUserSurnameIndex()].trim();
 
-            // set macrogroup
-            String haplogroup = entryList.get(accessionID).get(0).replace("'", "");
+            String haplogroup="NULL";
+            String haplotype="NULL";
+            String quality="NULL";
+            if(entryList == null){
+                haplogroup = "NULL";
+                haplotype = "NULL";
+                quality = "NULL";
+            } else {
+                try {
+                    haplogroup = entryList.get(accessionID).get(0).replace("'", "");
+                    haplotype = entryList.get(accessionID).get(3);
+                    quality = entryList.get(accessionID).get(1);
+                } catch (Exception e) {
+                    System.out.println("Sequence with accession id "+ accessionID + " not contained in Haplogrep2 result file");
+                }
+
+            }
+
 
             // complete geographic information
             locationCompleter.setEntry(entry.split(",", types.length));
@@ -112,17 +122,24 @@ public class UploadRunner {
             for (int i = 0; i < types.length; i++) {
 
                 String type = types[i].replace("#", "");
-                String info = meta_info[i].replace("\"", "");
+                String info;
+                if( meta_info[i] == null){
+                    info = "NULL";
+                } else {
+                    info = meta_info[i].replace("\"", "");
+                }
 
                 if(info == null) {
                     meta_info_parsed += "NULL,";
-                } else if (meta_info[i].equals("")) {
+                } else if (info.equals("NULL")) {
+                    meta_info_parsed += "NULL,";
+                }else if (info.equals("")) {
                     meta_info_parsed += "NULL,";
                 } else if (info.contains("'")) {
                     String hg_tmp = info.replace("'", "");
                     meta_info_parsed += "'" + hg_tmp + "',";
                 } else if (type.equals("String")) {
-                    meta_info_parsed += "'" + meta_info[i] + "',";
+                    meta_info_parsed += "'" + info + "',";
                 } else {
                     meta_info_parsed += info + ",";
                 }
@@ -133,22 +150,22 @@ public class UploadRunner {
 
             // write new header
             if (!isheaderWritter) {
-                metaInfoReader.addToHeader(",completeness,percentage_N,user_alias,haplogroup_current_versions,haplotype_current_versions,quality_haplotype_current_version\n");
-                metaInfoReader.addTotypes(",real,real,String,String,String,int\n");
+                metaInfoReader.addToHeader(",completeness,percentage_N,user_alias,haplogroup_current_versions,haplotype_current_versions,quality_haplotype_current_version, mt_sequence");
+                metaInfoReader.addTotypes(",real,real,String,String,String,int,String");
                 isheaderWritter = true;
             }
 
             // write everything to new metadata file
+
             String values = meta_info_parsed + "," + completeness + "," + percentageOfN + ",'" + user_alias + "','"
-                    + haplogroup + "','" + entryList.get(accessionID).get(3) + "',"
-                    + entryList.get(accessionID).get(1);
+                    + haplogroup + "','" +haplotype + "'," + quality + ",'" + header_to_fastaSequence_map.get(accessionID) + "'";
 
             values = values.replace("'NULL'", "NULL");
             values = values.replace("'\"", "'");
             values = values.replace("\"'", "'");
             values = values.replace("\"", "");
 
-            update_query = writeUpdateMeta(metaInfoReader.getHeader().substring(2), values);
+            update_query = writeUpdateMeta(metaInfoReader.getHeader().substring(2), values, fileNameWithoutExt);
 
 
             String query = "insert into meta (" + metaInfoReader.getHeader().substring(2) + ") values ("
@@ -157,28 +174,27 @@ public class UploadRunner {
             data_upload_query_meta_file.write(query);
         }
 
-        data_upload_query_sequences_file.close();
         data_upload_query_meta_file.close();
-
     }
 
 
-    private static String writeUpdateMeta(String header, String values) {
+    private static String writeUpdateMeta(String header, String values, String file ) {
         String update_tmp = "";
         String[] header_split = header.split(",");
         String[] values_split = values.split(",");
 
         if(header_split.length != values_split.length){
-            System.out.println("Header and values have not the same length.");
+            System.out.println("File : " + file + "Header and values have not the same length.");
         } else {
 
             for(int i = 0; i < header_split.length; i++){
+
                 if (i == header_split.length-1){
                     update_tmp += header_split[i] + "=" + values_split[i];
                 } else {
                     update_tmp += header_split[i] + "=" + values_split[i] + ",";
                 }
-            }
+                           }
         }
 
         return update_tmp;

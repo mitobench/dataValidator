@@ -245,7 +245,7 @@ public class LocationCompleter {
                         "RUS," +
                         "SVK," +
                         "UKR","Eastern Europe", "", "Europe"},
-                new String[]{"ALADNK," +
+                new String[]{"ALA," + "DNK," +
                         "EST," +
                         "FRO," +
                         "FIN," +
@@ -355,6 +355,8 @@ public class LocationCompleter {
     }
 
     public String[] getCompletedInformation() {
+
+        // todo: if column doesn't exist, add it (probably would be best to do so in the beginning, then no problems later on)
 
         // complete sample origin geo
         String sample_lat = entry[this.index_sample_origin_latitude];

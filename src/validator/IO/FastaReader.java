@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class FastaReader {
@@ -14,6 +15,7 @@ public class FastaReader {
     private String log_sequence_corretness="";
     private boolean correct=true;
     private boolean correct_chars=true;
+    private HashMap<String, String> sequenceMap;
 
     public FastaReader(String filename)
     {
@@ -94,6 +96,21 @@ public class FastaReader {
         }
 
     }
+
+
+    public void parseFasta(){
+
+        sequenceMap = new HashMap<>();
+
+        for (int i=0; i< sequence.length; i++)
+        {
+            sequenceMap.put(description[i], sequence[i].trim());
+
+        }
+    }
+
+    //return first sequence as a String
+    public HashMap<String, String> getSequenceMap(){ return sequenceMap;}
 
     //return all description as List
     public List<String> getDescription(){return Arrays.asList(description);}

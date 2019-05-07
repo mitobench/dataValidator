@@ -3,9 +3,7 @@ import validator.IO.ArgumentParser;
 import validator.IO.FastaReader;
 import validator.calculations.Validator;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashSet;
@@ -37,20 +35,24 @@ public class Main {
         String dir = optionsParser.getDir();
         // create folder for log files
         Files.createDirectories(new File(out + "logfiles" + File.separator).toPath());
+        int file_counter = 1;
 
         if(dir != null && Files.isDirectory(new File(dir).toPath())){
             Set<String> filenames = new HashSet<>();
             filenames = getFilenames(dir, filenames);
-            int file_counter = 1;
+
+
             for(String s : filenames){
                 try {
                     System.out.println("Processing file " + file_counter + "/" + filenames.size());
-                    run(s + ".fasta",s + ".csv", out);
                     file_counter++;
+                    run(s + ".fasta",s + ".csv", out);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
 
         } else {
 
@@ -68,36 +70,37 @@ public class Main {
 
 
     public static void run(String mt_sequences_filepath, String data_template_filepath, String out) throws Exception {
+        validator.resetLogs();
+
 
         System.out.println("Reading file " +  mt_sequences_filepath);
 
         String[] fileName = mt_sequences_filepath.replaceFirst("[.][^.]+$", "").split("/");
         String fileNameWithoutExt = fileName[fileName.length-1];
 
-        // init writer
-        BufferedWriter logfile = new BufferedWriter(new FileWriter(out + "logfiles" + File.separator +
-                fileNameWithoutExt +"_logfile.txt"));
+        if(!Files.exists(new File(out + "logfiles" + File.separator + "FAILED_" +
+                fileNameWithoutExt +"_logfile.txt").toPath()) && !Files.exists(new File(out + "logfiles" +
+                File.separator + "PASSED_" + fileNameWithoutExt +"_logfile.txt").toPath())) {
 
-        FastaReader fastaReader = new FastaReader(mt_sequences_filepath);
-        List<String> fastaheaders = fastaReader.getDescription();
+            FastaReader fastaReader = new FastaReader(mt_sequences_filepath);
+            List<String> fastaheaders = fastaReader.getDescription();
 
-        logfile.write("Data validation report based on files:\n" + mt_sequences_filepath+ "\n"+ data_template_filepath + "\n\n");
+            System.out.println("Running validation...");
 
-        System.out.println("Running validation...");
+            validator.validate(data_template_filepath, fastaheaders, fastaReader.getLog_sequence_corretness(), mt_sequences_filepath);
+            validator.writeLogFile(out, fileNameWithoutExt);
 
-        validator.validate(data_template_filepath, logfile, fastaheaders, fastaReader.getLog_sequence_corretness());
-        logfile.close();
-
-        System.out.println("You can check the logfile now: \n" + new File(out + "logfiles" + File.separator +
-                fileNameWithoutExt +"_logfile.txt").getAbsolutePath());
+            System.out.println("You can check the logfile now: \n" + new File(out + "logfiles" + File.separator +
+                    fileNameWithoutExt + "_logfile.txt").getAbsolutePath());
 
 
-        // if file is correct, start database_uploader
-        if (validator.isUploadPossible()){
-            System.out.println("Running dataUploader...");
+            // if file is correct, start database_uploader
+            if (validator.isUploadPossible()) {
+                System.out.println("Running dataUploader...");
 
-            UploadRunner uploadRunner = new UploadRunner();
-            uploadRunner.run(data_template_filepath, mt_sequences_filepath, out);
+                UploadRunner uploadRunner = new UploadRunner();
+                uploadRunner.run(data_template_filepath, mt_sequences_filepath, out, fastaReader);
+            }
         }
 
     }
