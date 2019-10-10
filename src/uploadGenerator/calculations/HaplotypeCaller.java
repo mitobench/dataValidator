@@ -43,7 +43,7 @@ public class HaplotypeCaller {
 
     private void start(String f) throws IOException, InterruptedException {
 
-        URL url = this.getClass().getResource("/haplogrep-2.1.18.jar");
+        URL url = this.getClass().getResource("/haplogrep-2.1.25.jar");
         String dirpath = url.getPath();
         String[] command = new String[] { "java", "-jar", dirpath,
                 "--format", "fasta",
