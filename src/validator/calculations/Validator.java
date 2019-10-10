@@ -168,6 +168,12 @@ public class Validator {
             int index_indirect_contextual_date = headerList.indexOf("indirect_contextual_date");
             attribute_index_map.put("indirect_contextual_date", index_indirect_contextual_date);
 
+            int index_indirect_contextual_date_from = headerList.indexOf("indirect_contextual_date_from");
+            attribute_index_map.put("indirect_contextual_date_from", index_indirect_contextual_date_from);
+
+            int index_indirect_contextual_date_to = headerList.indexOf("indirect_contextual_date_to");
+            attribute_index_map.put("indirect_contextual_date_to", index_indirect_contextual_date_to);
+
             int index_radiocarbon_lab_code = headerList.indexOf("radiocarbon_lab_code");
             attribute_index_map.put("radiocarbon_lab_code", index_radiocarbon_lab_code);
 
@@ -290,6 +296,10 @@ public class Validator {
                 log_missing_columns +="C14 are BP.\n";
             if(index_indirect_contextual_date == -1)
                 log_missing_columns +="Indirect contextual date.\n";
+            if(index_indirect_contextual_date_from == -1)
+                log_missing_columns +="Indirect contextual date from.\n";
+            if(index_indirect_contextual_date_to == -1)
+                log_missing_columns +="Indirect contextual date to.\n";
             if(index_radiocarbon_lab_code == -1)
                 log_missing_columns +="Radiocarbon lab code .\n";
             if(index_dating_comments == -1)

@@ -79,7 +79,7 @@ public class FastaReader {
         for (int i=0; i< seq.size(); i++)
         {
             String acc = (String) desc.get(i);
-            description[i] = acc.split(" ")[0].split("\\.")[0];
+            description[i] = acc.split(" ")[0].split("\\.")[0].trim();
             sequence[i]=(String) seq.get(i);
         }
 

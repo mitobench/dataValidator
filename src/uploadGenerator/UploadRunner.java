@@ -7,9 +7,7 @@ import uploadGenerator.calculations.LocationCompleter;
 import uploadGenerator.io.HSDParser;
 import uploadGenerator.io.MetaInfoReader;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +17,8 @@ public class UploadRunner {
     private static HashMap<String, String> header_to_fastaSequence_map = null;
 
 
-    public void run(String metaInfo_path, String sequences_path, String out_path, validator.IO.FastaReader fastaReader) throws Exception {
+
+    public void run(String metaInfo_path, String sequences_path, String out_path, validator.IO.FastaReader fastaReader, int counter) throws Exception {
 
         LocationCompleter locationCompleter = new LocationCompleter();
         Calculator calculator = new Calculator();
@@ -28,7 +27,7 @@ public class UploadRunner {
         String fileNameWithoutExt = fileName[fileName.length-1];
 
         BufferedWriter data_upload_query_meta_file = new BufferedWriter(new FileWriter(out_path +
-                fileNameWithoutExt + "_data_upload_queries_meta.sql"));
+                fileNameWithoutExt + "_" + counter + "_data_upload_queries_meta.sql"));
 
         String update_query = "";
 
@@ -75,7 +74,8 @@ public class UploadRunner {
 
             // calculate stats
             String accessionID_with_version = meta_info[metaInfoReader.getAccessionIDIndex()].replace("\"","");
-            String accessionID = accessionID_with_version.split("\\.")[0];
+            String accessionID = accessionID_with_version.split("\\.")[0].trim();
+            System.out.println(accessionID);
             String sequence = header_to_fastaSequence_map.get(accessionID);
 
             double completeness = -1;
@@ -121,12 +121,12 @@ public class UploadRunner {
 
             for (int i = 0; i < types.length; i++) {
 
-                String type = types[i].replace("#", "");
+                String type = types[i].replace("#", "").trim();
                 String info;
                 if( meta_info[i] == null){
                     info = "NULL";
                 } else {
-                    info = meta_info[i].replace("\"", "");
+                    info = meta_info[i].replace("\"", "").trim();
                 }
 
                 if(info == null) {
@@ -201,4 +201,6 @@ public class UploadRunner {
 
 
     }
+
+
 }
