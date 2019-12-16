@@ -37,7 +37,7 @@ public class Main {
 
         System.out.println("Running validation...");
 
-        validator.validate(data_template_filepath, logfile, fastaheaders, fastaReader.getLog_sequence_corretness());
+        validator.validate(data_template_filepath, fastaheaders, fastaReader.getLog_sequence_corretness(), mt_sequences_filepath);
         logfile.close();
 
         System.out.println("You can check the logfile now: \n" + new File(fileNameWithoutExt +"_logfile.txt").getAbsolutePath());
