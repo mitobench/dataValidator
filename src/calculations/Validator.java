@@ -556,8 +556,7 @@ public class Validator {
                         String population_purpose = line_splitted[index_population_purpose].toLowerCase().trim();
                         if (population_purpose.equals("")){
                             log_missing_value += "\tPopulation purpose is missing.\n";
-                        } else if(!population_purpose.equals("true") && !population_purpose.equals("false") &&
-                                !population_purpose.equals("t") && !population_purpose.equals("f")){
+                        } else if(!population_purpose.equals("yes") && !population_purpose.equals("no")){
                             log_incorrect_format += "Accession: "+ accession + "\tPopulation purpose is not in correct format: " + population_purpose + "\n";
                         }
                     }
