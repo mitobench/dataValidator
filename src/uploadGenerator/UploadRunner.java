@@ -156,7 +156,6 @@ public class UploadRunner {
             }
 
             // write everything to new metadata file
-
             String values = meta_info_parsed + "," + completeness + "," + percentageOfN + ",'" + user_alias + "','"
                     + haplogroup + "','" +haplotype + "'," + quality + ",'" + header_to_fastaSequence_map.get(accessionID) + "'";
 
@@ -194,7 +193,7 @@ public class UploadRunner {
                 } else {
                     update_tmp += header_split[i] + "=" + values_split[i] + ",";
                 }
-                           }
+            }
         }
 
         return update_tmp;
