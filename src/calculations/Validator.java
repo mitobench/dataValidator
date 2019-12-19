@@ -162,8 +162,8 @@ public class Validator {
             int index_calibrated_date_range_to = headerList.indexOf("calibrated_date_range_to");
             attribute_index_map.put("calibrated_date_range_to", index_calibrated_date_range_to);
 
-            int index_C14_age_BP = headerList.indexOf("C14_age_BP");
-            attribute_index_map.put("C14_age_BP", index_C14_age_BP);
+            int index_C14_age_BP = headerList.indexOf("c14_age_bp");
+            attribute_index_map.put("c14_age_bp", index_C14_age_BP);
 
             int index_indirect_contextual_date = headerList.indexOf("indirect_contextual_date");
             attribute_index_map.put("indirect_contextual_date", index_indirect_contextual_date);
@@ -192,8 +192,8 @@ public class Validator {
             int index_sequence_versions = headerList.indexOf("sequence_versions");
             attribute_index_map.put("sequence_versions", index_sequence_versions);
 
-            int index_comments_sequence_versions = headerList.indexOf("comments_sequence_versions");
-            attribute_index_map.put("comments_sequence_versions", index_comments_sequence_versions);
+            int index_comments_sequence_versions = headerList.indexOf("comments_sequence_version");
+            attribute_index_map.put("comments_sequence_version", index_comments_sequence_versions);
 
             int index_haplogroup_originally_published = headerList.indexOf("haplogroup_originally_published");
             attribute_index_map.put("haplogroup_originally_published", index_haplogroup_originally_published);
@@ -250,7 +250,6 @@ public class Validator {
             int index_user_affiliation = headerList.indexOf("user_affiliation");
 
             // stat missing columns:
-
 
             if(index_doi == -1 )
                 log_missing_columns += "DOI.\n";
