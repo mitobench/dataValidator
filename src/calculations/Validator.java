@@ -210,13 +210,13 @@ public class Validator {
             int index_access = headerList.indexOf("access");
             int index_population = headerList.indexOf("population");
 
-            int index_geographic_info_TMA_inferred_region = headerList.indexOf("geographic_info_TMA_inferred_region");
-            int index_geographic_info_TMA_inferred_subregion = headerList.indexOf("geographic_info_TMA_inferred_subregion");
-            int index_geographic_info_TMA_inferred_intermediate_region = headerList.indexOf("geographic_info_TMA_inferred_intermediate_region");
-            int index_geographic_info_TMA_inferred_country = headerList.indexOf("geographic_info_TMA_inferred_country");
-            int index_geographic_info_TMA_inferred_city = headerList.indexOf("geographic_info_TMA_inferred_city");
-            int index_geographic_info_TMA_inferred_latitude = headerList.indexOf("geographic_info_TMA_inferred_latitude");
-            int index_geographic_info_TMA_inferred_longitude = headerList.indexOf("geographic_info_TMA_inferred_longitude");
+            int index_geographic_info_tma_inferred_region = headerList.indexOf("geographic_info_tma_inferred_region");
+            int index_geographic_info_tma_inferred_subregion = headerList.indexOf("geographic_info_tma_inferred_subregion");
+            int index_geographic_info_tma_inferred_intermediate_region = headerList.indexOf("geographic_info_tma_inferred_intermediate_region");
+            int index_geographic_info_tma_inferred_country = headerList.indexOf("geographic_info_tma_inferred_country");
+            int index_geographic_info_tma_inferred_city = headerList.indexOf("geographic_info_tma_inferred_city");
+            int index_geographic_info_tma_inferred_latitude = headerList.indexOf("geographic_info_tma_inferred_latitude");
+            int index_geographic_info_tma_inferred_longitude = headerList.indexOf("geographic_info_tma_inferred_longitude");
 
             int index_sample_origin_region = headerList.indexOf("sampling_region");
             int index_sample_origin_subregion = headerList.indexOf("sampling_subregion");
@@ -242,7 +242,7 @@ public class Validator {
             int index_clan = headerList.indexOf("clan");
             int index_ethnicity = headerList.indexOf("ethnicity");
             int index_language = headerList.indexOf("language");
-            int index_generations_to_TMA = headerList.indexOf("generations_to_TMA");
+            int index_generations_to_tma = headerList.indexOf("generations_to_tma");
 
             int index_user_firstname = headerList.indexOf("user_firstname");
             int index_user_surname = headerList.indexOf("user_surname");
@@ -330,20 +330,20 @@ public class Validator {
                 log_missing_columns +="Access.\n";
             if(index_population == -1)
                 log_missing_columns +="Population.\n";
-            if(index_geographic_info_TMA_inferred_region == -1)
-                log_missing_columns +="Geographic info TMA inferred region.\n";
-            if(index_geographic_info_TMA_inferred_subregion == -1)
-                log_missing_columns +="Geographic info TMA inferred subregion.\n";
-            if(index_geographic_info_TMA_inferred_intermediate_region == -1)
-                log_missing_columns +="Geographic info TMA inferred intermediate region.\n";
-            if(index_geographic_info_TMA_inferred_country == -1)
-                log_missing_columns +="Geographic info TMA inferred country.\n";
-            if(index_geographic_info_TMA_inferred_city == -1)
-                log_missing_columns +="Geographic info TMA inferred city.\n";
-            if(index_geographic_info_TMA_inferred_latitude == -1)
-                log_missing_columns +="Geographic info TMA inferred latitude.\n";
-            if(index_geographic_info_TMA_inferred_longitude == -1)
-                log_missing_columns +="Geographic info TMA inferred longitude.\n";
+            if(index_geographic_info_tma_inferred_region == -1)
+                log_missing_columns +="Geographic info tma inferred region.\n";
+            if(index_geographic_info_tma_inferred_subregion == -1)
+                log_missing_columns +="Geographic info tma inferred subregion.\n";
+            if(index_geographic_info_tma_inferred_intermediate_region == -1)
+                log_missing_columns +="Geographic info tma inferred intermediate region.\n";
+            if(index_geographic_info_tma_inferred_country == -1)
+                log_missing_columns +="Geographic info tma inferred country.\n";
+            if(index_geographic_info_tma_inferred_city == -1)
+                log_missing_columns +="Geographic info tma inferred city.\n";
+            if(index_geographic_info_tma_inferred_latitude == -1)
+                log_missing_columns +="Geographic info tma inferred latitude.\n";
+            if(index_geographic_info_tma_inferred_longitude == -1)
+                log_missing_columns +="Geographic info tma inferred longitude.\n";
             if(index_sample_origin_region == -1)
                 log_missing_columns +="Sample origin region.\n";
             if(index_sample_origin_subregion == -1)
@@ -388,8 +388,8 @@ public class Validator {
                 log_missing_columns +="Ethnicity.\n";
             if(index_language == -1)
                 log_missing_columns +="Language.\n";
-            if(index_generations_to_TMA == -1)
-                log_missing_columns +="Generations to TMA.\n";
+            if(index_generations_to_tma == -1)
+                log_missing_columns +="Generations to tma.\n";
             if(index_user_firstname == -1)
                 log_missing_columns +="User first name.\n";
             if(index_user_surname == -1)
@@ -501,9 +501,9 @@ public class Validator {
                     if(index_maximum_coverage != -1){
                         String number = line_splitted[index_maximum_coverage];
                         if(number.equals("")){
-                            log_missing_value += "\tMaximum coverage is missing\n";
+                            log_missing_value += "\tmaximum coverage is missing\n";
                         } else if(!isStringInt(number)){
-                            log_incorrect_format += "Accession: "+ accession + "\tMaximum coverage is not in correct format: " + number + "\n";
+                            log_incorrect_format += "Accession: "+ accession + "\tmaximum coverage is not in correct format: " + number + "\n";
                         }
                     }
 
@@ -571,68 +571,68 @@ public class Validator {
                     }
 
                     // --------------------------------------------------------------------------------------------------------------------
-                    // GEOGRAPHIC INFO - TMA INFERRED
+                    // GEOGRAPHIC INFO - tma INFERRED
 
-                    if(index_geographic_info_TMA_inferred_region != -1){
-                        String geographic_info_TMA_inferred_region = line_splitted[index_geographic_info_TMA_inferred_region].toLowerCase().trim();
-                        if (geographic_info_TMA_inferred_region.equals("")) {
-                            log_missing_value += "\tGeographic info TMA inferred region is missing.\n";
-                        } else if(!region.contains(geographic_info_TMA_inferred_region) && !isStringInt(geographic_info_TMA_inferred_region)){
-                            log_incorrect_format += "Accession: "+ accession + "\tGeographic info TMA inferred region is not in correct format: " + geographic_info_TMA_inferred_region + "\n";
+                    if(index_geographic_info_tma_inferred_region != -1){
+                        String geographic_info_tma_inferred_region = line_splitted[index_geographic_info_tma_inferred_region].toLowerCase().trim();
+                        if (geographic_info_tma_inferred_region.equals("")) {
+                            log_missing_value += "\tGeographic info tma inferred region is missing.\n";
+                        } else if(!region.contains(geographic_info_tma_inferred_region) && !isStringInt(geographic_info_tma_inferred_region)){
+                            log_incorrect_format += "Accession: "+ accession + "\tGeographic info tma inferred region is not in correct format: " + geographic_info_tma_inferred_region + "\n";
                         }
                     }
 
-                    if(index_geographic_info_TMA_inferred_subregion != -1){
-                        String geographic_info_TMA_inferred_subregion = line_splitted[index_geographic_info_TMA_inferred_subregion].toLowerCase().trim();
-                        if (geographic_info_TMA_inferred_subregion.equals("")) {
-                            log_missing_value += "\tGeographic info TMA inferred subregion is missing.\n";
-                        } else if(!subregion.contains(geographic_info_TMA_inferred_subregion)&& !isStringInt(geographic_info_TMA_inferred_subregion)){
-                            log_incorrect_format += "Accession: "+ accession + "\tGeographic info TMA inferred subregion is not in correct format: " + geographic_info_TMA_inferred_subregion + "\n";
+                    if(index_geographic_info_tma_inferred_subregion != -1){
+                        String geographic_info_tma_inferred_subregion = line_splitted[index_geographic_info_tma_inferred_subregion].toLowerCase().trim();
+                        if (geographic_info_tma_inferred_subregion.equals("")) {
+                            log_missing_value += "\tGeographic info tma inferred subregion is missing.\n";
+                        } else if(!subregion.contains(geographic_info_tma_inferred_subregion)&& !isStringInt(geographic_info_tma_inferred_subregion)){
+                            log_incorrect_format += "Accession: "+ accession + "\tGeographic info tma inferred subregion is not in correct format: " + geographic_info_tma_inferred_subregion + "\n";
                         }
                     }
 
-                    if(index_geographic_info_TMA_inferred_intermediate_region != -1){
-                        String geographic_info_TMA_inferred_intermediate_region = line_splitted[index_geographic_info_TMA_inferred_intermediate_region].toLowerCase().trim();
-                        if (geographic_info_TMA_inferred_intermediate_region.equals("")) {
-                            log_missing_value += "\tGeographic info TMA inferred intermediate region is missing.\n";
-                        } else if(!intermediate_region.contains(geographic_info_TMA_inferred_intermediate_region) && !isStringInt(geographic_info_TMA_inferred_intermediate_region)){
-                            log_incorrect_format += "Accession: "+ accession + "\tGeographic info TMA inferred intermediate region is not in correct format: " + geographic_info_TMA_inferred_intermediate_region + "\n";
+                    if(index_geographic_info_tma_inferred_intermediate_region != -1){
+                        String geographic_info_tma_inferred_intermediate_region = line_splitted[index_geographic_info_tma_inferred_intermediate_region].toLowerCase().trim();
+                        if (geographic_info_tma_inferred_intermediate_region.equals("")) {
+                            log_missing_value += "\tGeographic info tma inferred intermediate region is missing.\n";
+                        } else if(!intermediate_region.contains(geographic_info_tma_inferred_intermediate_region) && !isStringInt(geographic_info_tma_inferred_intermediate_region)){
+                            log_incorrect_format += "Accession: "+ accession + "\tGeographic info tma inferred intermediate region is not in correct format: " + geographic_info_tma_inferred_intermediate_region + "\n";
                         }
                     }
 
 
-                    if(index_geographic_info_TMA_inferred_country != -1){
-                        String geographic_info_TMA_inferred_country = line_splitted[index_geographic_info_TMA_inferred_country];
-                        geographic_info_TMA_inferred_country = geographic_info_TMA_inferred_country.trim();
-                        if (geographic_info_TMA_inferred_country.equals("")) {
-                            log_missing_value += "\tGeographic info TMA inferred country is missing.\n";
-                        } else if(!country.contains(geographic_info_TMA_inferred_country) && !isStringInt(geographic_info_TMA_inferred_country)){
-                            log_incorrect_format += "Accession: "+ accession + "\tGeographic info TMA inferred country is not in correct format: " + geographic_info_TMA_inferred_country + "\n";
+                    if(index_geographic_info_tma_inferred_country != -1){
+                        String geographic_info_tma_inferred_country = line_splitted[index_geographic_info_tma_inferred_country];
+                        geographic_info_tma_inferred_country = geographic_info_tma_inferred_country.trim();
+                        if (geographic_info_tma_inferred_country.equals("")) {
+                            log_missing_value += "\tGeographic info tma inferred country is missing.\n";
+                        } else if(!country.contains(geographic_info_tma_inferred_country) && !isStringInt(geographic_info_tma_inferred_country)){
+                            log_incorrect_format += "Accession: "+ accession + "\tGeographic info tma inferred country is not in correct format: " + geographic_info_tma_inferred_country + "\n";
                         }
                     }
 
-                    if(index_geographic_info_TMA_inferred_latitude != -1){
-                        String number = line_splitted[index_geographic_info_TMA_inferred_latitude];
+                    if(index_geographic_info_tma_inferred_latitude != -1){
+                        String number = line_splitted[index_geographic_info_tma_inferred_latitude];
                         if(number.equals("")){
-                            log_missing_value += "\tGeographic info TMA inferred latitude is missing.\n";
+                            log_missing_value += "\tGeographic info tma inferred latitude is missing.\n";
                         } else {
                             try {
                                 Double.parseDouble(number);
                             } catch(NumberFormatException e) {
-                                log_incorrect_format += "Accession: "+ accession + "\tGeographic info TMA inferred latitude is not in correct format: " + number + "\n";
+                                log_incorrect_format += "Accession: "+ accession + "\tGeographic info tma inferred latitude is not in correct format: " + number + "\n";
                             }
                         }
                     }
 
-                    if(index_geographic_info_TMA_inferred_longitude != -1){
-                        String number = line_splitted[index_geographic_info_TMA_inferred_longitude];
+                    if(index_geographic_info_tma_inferred_longitude != -1){
+                        String number = line_splitted[index_geographic_info_tma_inferred_longitude];
                         if(number.equals("")){
-                            log_missing_value += "\tGeographic info TMA inferred longitude is missing.\n";
+                            log_missing_value += "\tGeographic info tma inferred longitude is missing.\n";
                         } else {
                             try {
                                 Double.parseDouble(number);
                             } catch(NumberFormatException e) {
-                                log_incorrect_format += "Accession: "+ accession + "\tGeographic info TMA inferred longitude is not in correct format: " + number + "\n";
+                                log_incorrect_format += "Accession: "+ accession + "\tGeographic info tma inferred longitude is not in correct format: " + number + "\n";
                             }
                         }
                     }
@@ -775,12 +775,12 @@ public class Validator {
 
 
                     // --------------------------------------------------------------------------------------------------------------------
-                    if(index_generations_to_TMA != -1){
-                        String number = line_splitted[index_generations_to_TMA];
+                    if(index_generations_to_tma != -1){
+                        String number = line_splitted[index_generations_to_tma];
                         if(number.equals("")){
-                            log_missing_value += "\tGenerations to TMA is missing\n";
+                            log_missing_value += "\tGenerations to tma is missing\n";
                         } else if(!isStringInt(number)){
-                            log_incorrect_format += "Accession: "+ accession + "\tGenerations to TMA is not in correct format: " + number + "\n";
+                            log_incorrect_format += "Accession: "+ accession + "\tGenerations to tma is not in correct format: " + number + "\n";
                         }
                     }
 
